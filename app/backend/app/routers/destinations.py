@@ -29,6 +29,12 @@ def get_destinations(
         q = q.filter(Destination.estimated_budget_inr <= max_budget)
     return q.all()
 
+@router.get("/states", response_model=List[str])
+def get_unique_states(db: Session = Depends(get_db)):
+    """Return all unique Indian states available in the travel database."""
+    states = db.query(Destination.state).filter(Destination.is_international == False).distinct().all()
+    return [s[0] for s in states if s[0]]
+
 @router.get("/{destination_id}", response_model=DestinationResponse)
 def get_destination_by_id(destination_id: str, db: Session = Depends(get_db)):
     dest = db.query(Destination).filter(Destination.id == destination_id).first()
