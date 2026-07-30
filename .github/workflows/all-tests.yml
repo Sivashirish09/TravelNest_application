@@ -71,17 +71,9 @@ jobs:
         with:
           chrome-version: stable
 
-      - name: 🔍 Check Chrome & ChromeDriver Versions
+      - name: 🔍 Check Chrome Version
         run: |
           google-chrome --version
-          chromedriver --version || true
-
-      - name: 🌐 Install Matching ChromeDriver
-        working-directory: selenium-tests
-        run: |
-          CHROME_VERSION=$(google-chrome --version | grep -oP '\d+' | head -1)
-          echo "Chrome Major Version: $CHROME_VERSION"
-          npm install chromedriver@${CHROME_VERSION} --save-dev || npm install chromedriver --save-dev
 
       - name: 🧪 Run Selenium Tests (Headless)
         working-directory: selenium-tests
