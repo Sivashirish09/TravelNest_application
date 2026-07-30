@@ -2,11 +2,11 @@
   "name": "travelnest-ai-trip-planner",
   "version": "1.0.0",
   "description": "TravelNest AI Trip Planner & Hotel Booking Platform",
-  "main": "web-app/index.html",
+  "main": "server.js",
   "scripts": {
-    "dev": "npx -y serve web-app -l 3000",
-    "start": "npx -y serve web-app -l 3000",
-    "serve": "npx -y serve web-app -l 3000",
+    "dev": "node server.js",
+    "start": "node server.js",
+    "serve": "node server.js",
     "test": "node selenium-tests/tests/login-tests.js && node appium-tests/appium-tests.js && node dast-tests/dast-runner.js && node load-tests/load-runner.js",
     "test:selenium": "node selenium-tests/tests/login-tests.js",
     "test:appium": "node appium-tests/appium-tests.js",
@@ -14,7 +14,6 @@
     "test:load": "node load-tests/load-runner.js"
   },
   "dependencies": {
-    "firebase": "^12.16.0",
-    "serve": "^14.2.1"
+    "firebase": "^12.16.0"
   }
 }
