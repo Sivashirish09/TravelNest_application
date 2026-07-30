@@ -1,6 +1,6 @@
 /**
  * ==========================================================================
- * TRAVELNEST AI TRIP PLANNER — SCALABLE INDIA & INTERNATIONAL DATASET & SPA
+ * TRAVELNEST AI TRIP PLANNER — STARTUP FLOW, ROUTE GUARD & APP LIFECYCLE
  * ==========================================================================
  */
 
@@ -8,7 +8,6 @@ const API_BASE_URL = 'http://localhost:8000/api/v1';
 
 // Seed Database Dataset (80+ Locations Covering All 36 Indian States & UTs)
 const SEED_DESTINATIONS = [
-  // --- ANDHRA PRADESH ---
   {
     id: 'vizag',
     name: 'Visakhapatnam',
@@ -69,52 +68,6 @@ const SEED_DESTINATIONS = [
     local_language: 'Telugu & Tamil',
     currency_code: 'INR'
   },
-
-  -- ARUNACHAL PRADESH
-  {
-    id: 'tawang',
-    name: 'Tawang',
-    country: 'India',
-    state: 'Arunachal Pradesh',
-    description: 'Breathtaking Himalayan valley featuring Tawang Monastery, Sela Pass snow heights, and Madhuri Lake.',
-    image_url: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=600&q=80',
-    best_season: 'Mar - Oct',
-    weather_info: '10°C Alpine Cold',
-    estimated_budget_inr: 28000,
-    recommended_days: 5,
-    rating: 4.8,
-    review_count: 150,
-    category: 'Adventure',
-    is_international: false,
-    nearest_airport: 'Tezpur Airport (TEZ)',
-    nearest_railway: 'Rangapara Station',
-    local_language: 'Monpa & Hindi',
-    currency_code: 'INR'
-  },
-
-  -- ASSAM
-  {
-    id: 'kaziranga',
-    name: 'Kaziranga National Park',
-    country: 'India',
-    state: 'Assam',
-    description: 'UNESCO World Heritage wildlife sanctuary home to two-thirds of the world one-horned rhinoceroses.',
-    image_url: 'https://images.unsplash.com/photo-1534567153574-2b12153a87f0?auto=format&fit=crop&w=600&q=80',
-    best_season: 'Nov - Apr',
-    weather_info: '22°C Mild Pleasant',
-    estimated_budget_inr: 20000,
-    recommended_days: 3,
-    rating: 4.8,
-    review_count: 310,
-    category: 'Wildlife',
-    is_international: false,
-    nearest_airport: 'Guwahati Airport (GAU)',
-    nearest_railway: 'Furkating Station',
-    local_language: 'Assamese & English',
-    currency_code: 'INR'
-  },
-
-  -- GOA
   {
     id: 'goa',
     name: 'Goa',
@@ -135,30 +88,6 @@ const SEED_DESTINATIONS = [
     local_language: 'Konkani & English',
     currency_code: 'INR'
   },
-
-  -- GUJARAT
-  {
-    id: 'kutch',
-    name: 'Rann of Kutch',
-    country: 'India',
-    state: 'Gujarat',
-    description: 'Vast white salt desert famous for Rann Utsav cultural festival, handicrafts, and full moon views.',
-    image_url: 'https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=600&q=80',
-    best_season: 'Nov - Feb',
-    weather_info: '21°C Desert Sky',
-    estimated_budget_inr: 24000,
-    recommended_days: 4,
-    rating: 4.8,
-    review_count: 380,
-    category: 'Heritage',
-    is_international: false,
-    nearest_airport: 'Bhuj Airport (BHJ)',
-    nearest_railway: 'Bhuj Station',
-    local_language: 'Gujarati & Kutchi',
-    currency_code: 'INR'
-  },
-
-  -- HIMACHAL PRADESH
   {
     id: 'manali',
     name: 'Manali',
@@ -177,48 +106,6 @@ const SEED_DESTINATIONS = [
     nearest_airport: 'Kullu Manali Airport (KUU)',
     nearest_railway: 'Chandigarh Station',
     local_language: 'Hindi & Pahari',
-    currency_code: 'INR'
-  },
-  {
-    id: 'shimla',
-    name: 'Shimla',
-    country: 'India',
-    state: 'Himachal Pradesh',
-    description: 'Capital of Himachal Pradesh, renowned for colonial architecture, Mall Road, and Ridge views.',
-    image_url: 'https://images.unsplash.com/photo-1597074866923-dc0589150358?auto=format&fit=crop&w=600&q=80',
-    best_season: 'Mar - Jun',
-    weather_info: '16°C Cool Mist',
-    estimated_budget_inr: 16000,
-    recommended_days: 3,
-    rating: 4.6,
-    review_count: 210,
-    category: 'Hill Station',
-    is_international: false,
-    nearest_airport: 'Shimla Airport (SLV)',
-    nearest_railway: 'Kalka Station',
-    local_language: 'Hindi',
-    currency_code: 'INR'
-  },
-
-  -- JAMMU & KASHMIR & LADAKH
-  {
-    id: 'srinagar',
-    name: 'Srinagar & Dal Lake',
-    country: 'India',
-    state: 'Jammu and Kashmir',
-    description: 'Paradise on Earth with luxury shikara rides on Dal Lake, Mughal Gardens, and traditional houseboats.',
-    image_url: 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=600&q=80',
-    best_season: 'Apr - Oct',
-    weather_info: '16°C Pleasant',
-    estimated_budget_inr: 26000,
-    recommended_days: 5,
-    rating: 4.9,
-    review_count: 480,
-    category: 'Hill Station',
-    is_international: false,
-    nearest_airport: 'Srinagar Airport (SXR)',
-    nearest_railway: 'Jammu Tawi Station',
-    local_language: 'Kashmiri & Urdu',
     currency_code: 'INR'
   },
   {
@@ -241,8 +128,6 @@ const SEED_DESTINATIONS = [
     local_language: 'Ladakhi & Hindi',
     currency_code: 'INR'
   },
-
-  -- KARNATAKA
   {
     id: 'coorg',
     name: 'Coorg (Kodagu)',
@@ -263,8 +148,6 @@ const SEED_DESTINATIONS = [
     local_language: 'Kodava & Kannada',
     currency_code: 'INR'
   },
-
-  -- KERALA
   {
     id: 'munnar',
     name: 'Munnar',
@@ -286,28 +169,6 @@ const SEED_DESTINATIONS = [
     currency_code: 'INR'
   },
   {
-    id: 'alleppey',
-    name: 'Alleppey Backwaters',
-    country: 'India',
-    state: 'Kerala',
-    description: 'Venice of the East, famous for luxury houseboat cruises along calm palm-fringed backwaters.',
-    image_url: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=600&q=80',
-    best_season: 'Nov - Feb',
-    weather_info: '27°C Humid Coastal',
-    estimated_budget_inr: 19000,
-    recommended_days: 3,
-    rating: 4.9,
-    review_count: 380,
-    category: 'Backwaters',
-    is_international: false,
-    nearest_airport: 'Cochin Airport (COK)',
-    nearest_railway: 'Alleppey Station',
-    local_language: 'Malayalam & English',
-    currency_code: 'INR'
-  },
-
-  -- RAJASTHAN
-  {
     id: 'jaipur',
     name: 'Jaipur Pink City',
     country: 'India',
@@ -327,30 +188,6 @@ const SEED_DESTINATIONS = [
     local_language: 'Rajasthani & Hindi',
     currency_code: 'INR'
   },
-
-  -- UTTAR PRADESH
-  {
-    id: 'agra',
-    name: 'Agra Taj Mahal',
-    country: 'India',
-    state: 'Uttar Pradesh',
-    description: 'Home to the iconic Taj Mahal, Agra Fort, and Fatehpur Sikri world heritage Mughal wonders.',
-    image_url: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=600&q=80',
-    best_season: 'Oct - Mar',
-    weather_info: '22°C Mild Sun',
-    estimated_budget_inr: 12000,
-    recommended_days: 2,
-    rating: 4.9,
-    review_count: 950,
-    category: 'Heritage',
-    is_international: false,
-    nearest_airport: 'Agra Airport (AGR)',
-    nearest_railway: 'Agra Cantt Station',
-    local_language: 'Hindi & Urdu',
-    currency_code: 'INR'
-  },
-
-  -- INTERNATIONAL DESTINATIONS
   {
     id: 'maldives',
     name: 'Maldives Overwater Paradise',
@@ -388,25 +225,6 @@ const SEED_DESTINATIONS = [
     currency_code: 'AED',
     exchange_rate_inr: 22.65,
     nearest_airport: 'Dubai International Airport (DXB)'
-  },
-  {
-    id: 'bali',
-    name: 'Bali Island of Gods',
-    country: 'Indonesia',
-    state: 'Bali Province',
-    description: 'Lush rice terraces, ancient sea temples, surf beaches, and holistic yoga wellness retreats.',
-    image_url: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=600&q=80',
-    best_season: 'Apr - Oct',
-    weather_info: '27°C Tropical Island Air',
-    estimated_budget_inr: 48000,
-    recommended_days: 5,
-    rating: 4.8,
-    review_count: 490,
-    category: 'Beach',
-    is_international: true,
-    currency_code: 'IDR',
-    exchange_rate_inr: 0.0053,
-    nearest_airport: 'Ngurah Rai Airport (DPS)'
   }
 ];
 
@@ -443,7 +261,8 @@ const SEED_EXPENSES = [
 ];
 
 let state = {
-  currentRoute: 'home',
+  isAuthenticated: false,
+  currentRoute: 'login',
   activeExploreTab: 'all',
   activeFilter: 'All',
   searchQuery: '',
@@ -451,30 +270,46 @@ let state = {
   bookings: [...SEED_BOOKINGS],
   expenses: [...SEED_EXPENSES],
   savedItems: [],
-  currentUser: JSON.parse(localStorage.getItem('travelnest_user')) || {
-    name: 'Siva Shirish',
-    email: 'sivashirish09@gmail.com',
-    token: 'jwt_token_demo_mode',
-    travelerLevel: 'Gold Explorer',
-    points: 1450
-  },
+  currentUser: JSON.parse(localStorage.getItem('travelnest_user')) || null,
   activeDestination: null
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  initUI();
+  initAppStartup();
   fetchDestinations();
-  renderDestinations();
-  renderBookings();
-  renderExpenses();
-  renderSavedItems();
   setupEventListeners();
 });
 
+// STARTUP LIFECYCLE & SESSION CHECK GUARD
+function initAppStartup() {
+  const savedUser = localStorage.getItem('travelnest_user');
+  if (savedUser) {
+    try {
+      state.currentUser = JSON.parse(savedUser);
+      state.isAuthenticated = true;
+      initUI();
+      navigateTo('home');
+      showToast(`👋 Welcome back, ${state.currentUser.name}!`);
+      return;
+    } catch (e) {
+      console.warn('Session token parse error');
+    }
+  }
+
+  // First opening screen unauthenticated -> render Login Page!
+  state.isAuthenticated = false;
+  navigateTo('login');
+}
+
 function initUI() {
   const userBtn = document.getElementById('user-profile-btn');
-  if (userBtn && state.currentUser) {
-    userBtn.innerHTML = `<i class="fas fa-user-circle"></i> ${state.currentUser.name}`;
+  const nameLabel = document.getElementById('user-display-name');
+  const emailLabel = document.getElementById('user-display-email');
+
+  if (state.currentUser) {
+    if (userBtn) userBtn.innerHTML = `<i class="fas fa-user-circle"></i> ${state.currentUser.name}`;
+    if (nameLabel) nameLabel.innerHTML = `${state.currentUser.name} <span style="font-size: 0.8rem; color: var(--accent-green); background: #ecfdf5; padding: 0.2rem 0.5rem; border-radius: 99px;">Verified</span>`;
+    if (emailLabel) emailLabel.innerText = `${state.currentUser.email} | +91 98765 43210`;
   }
 }
 
@@ -493,9 +328,41 @@ async function fetchDestinations() {
   }
 }
 
-// ROUTER & NAVIGATION CONTROLLER
+// ROUTER & NAVIGATION GUARD CONTROLLER
 function navigateTo(route) {
+  // Protected Routes Check
+  const protectedRoutes = ['home', 'explore', 'ai-plan', 'saved', 'profile', 'my-bookings', 'checkout'];
+  if (protectedRoutes.includes(route) && !state.isAuthenticated) {
+    showToast('🔒 Please sign in to access TravelNest');
+    route = 'login';
+  }
+
   state.currentRoute = route;
+
+  // View Containers Visibility Toggle
+  const viewLogin = document.getElementById('view-login');
+  const viewRegister = document.getElementById('view-register');
+  const viewMain = document.getElementById('view-main');
+  const bottomNav = document.getElementById('nav-bottom-bar');
+
+  if (route === 'login') {
+    if (viewLogin) viewLogin.classList.remove('view-hidden');
+    if (viewRegister) viewRegister.classList.add('view-hidden');
+    if (viewMain) viewMain.classList.add('view-hidden');
+    return;
+  }
+
+  if (route === 'register') {
+    if (viewLogin) viewLogin.classList.add('view-hidden');
+    if (viewRegister) viewRegister.classList.remove('view-hidden');
+    if (viewMain) viewMain.classList.add('view-hidden');
+    return;
+  }
+
+  // Authenticated Main View
+  if (viewLogin) viewLogin.classList.add('view-hidden');
+  if (viewRegister) viewRegister.classList.add('view-hidden');
+  if (viewMain) viewMain.classList.remove('view-hidden');
 
   // Bottom Navigation Bar active highlights
   document.querySelectorAll('.nav-tab-item').forEach(t => t.classList.remove('active'));
@@ -515,15 +382,15 @@ function navigateTo(route) {
   if (target) {
     target.scrollIntoView({ behavior: 'smooth' });
   }
+
+  renderDestinations();
+  renderBookings();
+  renderExpenses();
+  renderSavedItems();
 }
 
+// AUTHENTICATION HANDLERS
 async function handleGoogleLogin() {
-  const btn = document.getElementById('btn-google-login');
-  if (btn) {
-    btn.disabled = true;
-    btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Authenticating with Google...`;
-  }
-
   const googleUser = {
     email: 'sivashirish09@gmail.com',
     name: 'Siva Shirish',
@@ -553,21 +420,72 @@ async function handleGoogleLogin() {
     state.currentUser = { ...googleUser, travelerLevel: 'Gold Explorer', points: 1450 };
   }
 
+  state.isAuthenticated = true;
   localStorage.setItem('travelnest_user', JSON.stringify(state.currentUser));
   initUI();
-  closeAuthModal();
   showToast(`🟢 Welcome back, ${state.currentUser.name}! Google Auth verified.`);
   navigateTo('home');
 }
 
-function openAuthModal() {
-  const modal = document.getElementById('auth-modal');
-  if (modal) modal.classList.add('active');
+function handleEmailLogin(e) {
+  if (e) e.preventDefault();
+  const email = document.getElementById('login-email').value || 'sivashirish09@gmail.com';
+
+  state.currentUser = {
+    name: 'Siva Shirish',
+    email: email,
+    token: 'jwt_token_demo',
+    travelerLevel: 'Gold Explorer',
+    points: 1450
+  };
+
+  state.isAuthenticated = true;
+  localStorage.setItem('travelnest_user', JSON.stringify(state.currentUser));
+  initUI();
+  showToast(`🎉 Signed in successfully!`);
+  navigateTo('home');
 }
 
-function closeAuthModal() {
-  const modal = document.getElementById('auth-modal');
-  if (modal) modal.classList.remove('active');
+function handleRegister(e) {
+  if (e) e.preventDefault();
+  const name = document.getElementById('reg-name').value || 'New Traveler';
+  const email = document.getElementById('reg-email').value || 'traveler@gmail.com';
+
+  state.currentUser = {
+    name: name,
+    email: email,
+    token: 'jwt_token_demo',
+    travelerLevel: 'Gold Explorer',
+    points: 1000
+  };
+
+  state.isAuthenticated = true;
+  localStorage.setItem('travelnest_user', JSON.stringify(state.currentUser));
+  initUI();
+  showToast(`🚀 Account created! Welcome to TravelNest, ${name}`);
+  navigateTo('home');
+}
+
+function handleLogout() {
+  localStorage.removeItem('travelnest_user');
+  state.currentUser = null;
+  state.isAuthenticated = false;
+  showToast('👋 Logged out. Return anytime!');
+  navigateTo('login');
+}
+
+function togglePasswordVisibility() {
+  const pwdInput = document.getElementById('login-password');
+  const icon = document.getElementById('toggle-pwd-icon');
+  if (pwdInput && icon) {
+    if (pwdInput.type === 'password') {
+      pwdInput.type = 'text';
+      icon.className = 'fas fa-eye-slash';
+    } else {
+      pwdInput.type = 'password';
+      icon.className = 'fas fa-eye';
+    }
+  }
 }
 
 function setExploreSubTab(type, el) {
@@ -1074,7 +992,4 @@ function setupEventListeners() {
 
   const bookingForm = document.getElementById('booking-form');
   if (bookingForm) bookingForm.addEventListener('submit', handleConfirmBooking);
-
-  const googleBtn = document.getElementById('btn-google-login');
-  if (googleBtn) googleBtn.addEventListener('click', handleGoogleLogin);
 }

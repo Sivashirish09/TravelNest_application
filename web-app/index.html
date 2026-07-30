@@ -21,324 +21,379 @@
 <body>
 
   <!-- ==========================================================================
-       1. TOP BRAND HEADER
+       1. LOGIN VIEW (FIRST OPENING SCREEN FOR UNAUTHENTICATED USERS)
        ========================================================================== -->
-  <header class="top-brand-header">
-    <div class="container" style="display: flex; align-items: center; justify-content: space-between;">
-      <a href="#" class="brand-logo" onclick="navigateTo('home')">
-        <div class="brand-icon">
-          <i class="fas fa-compass"></i>
+  <div id="view-login" class="app-view">
+    <div class="auth-card-container">
+      <div class="auth-hero-banner">
+        <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=600&q=80" alt="TravelNest Banner" class="auth-banner-img">
+        <div class="auth-banner-overlay">
+          <div class="brand-icon" style="width: 48px; height: 48px; font-size: 1.4rem; margin-bottom: 0.5rem;">
+            <i class="fas fa-compass"></i>
+          </div>
+          <h1 style="color: #fff; font-size: 1.8rem;">TravelNest</h1>
+          <p style="color: rgba(255,255,255,0.9); font-size: 0.9rem;">Smart Travel. Better Trips.</p>
         </div>
-        <span>Travel<span class="gradient-text">Nest</span></span>
-      </a>
-
-      <div style="display: flex; align-items: center; gap: 0.75rem;">
-        <button class="btn btn-secondary btn-sm" id="user-profile-btn" onclick="openAuthModal()">
-          <i class="fas fa-user-circle"></i> Siva Shirish
-        </button>
-        <button class="btn btn-primary btn-sm" onclick="navigateTo('ai-plan')">
-          <i class="fas fa-sparkles"></i> AI Plan
-        </button>
       </div>
-    </div>
-  </header>
 
-  <main>
-    <!-- ==========================================================================
-         2. HERO SECTION & SEARCH
-         ========================================================================== -->
-    <section class="hero-section" id="home-section">
-      <div class="container">
-        <span class="badge-tag" id="hero-badge">
-          <i class="fas fa-robot"></i> Powered by Gemini AI & PostgreSQL Database
-        </span>
-
-        <h1 class="hero-title">
-          Plan Smarter. <span class="gradient-text">Travel Better.</span>
-        </h1>
-
-        <p class="hero-subtitle">
-          Discover destinations across India's 36 States & UTs and major International travel hubs, create AI-powered itineraries, and manage your complete trip.
+      <div class="auth-body">
+        <h2 style="font-size: 1.35rem; margin-bottom: 0.25rem;">Sign In to Your Account</h2>
+        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.25rem;">
+          Access your AI itineraries, saved trips, and bookings.
         </p>
 
-        <!-- Search Box -->
-        <div class="search-box">
-          <div class="search-field">
-            <label for="search-input">Location / Destination / State</label>
-            <input type="text" id="search-input" placeholder="e.g. Goa, Kerala, Leh, Kashmir, Rajasthan, Maldives..." autocomplete="off">
+        <!-- Google OAuth Button -->
+        <button class="btn btn-secondary" id="btn-google-login" style="width: 100%; padding: 0.75rem; margin-bottom: 1rem; font-size: 0.92rem; justify-content: center; box-shadow: var(--shadow-sm);" onclick="handleGoogleLogin()">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style="width: 18px; height: 18px; margin-right: 0.5rem;">
+          Continue with Google
+        </button>
+
+        <div style="display: flex; align-items: center; margin: 1rem 0; color: var(--text-muted); font-size: 0.78rem;">
+          <hr style="flex: 1; border: none; border-top: 1px solid var(--border-color);">
+          <span style="padding: 0 0.5rem;">OR EMAIL SIGN IN</span>
+          <hr style="flex: 1; border: none; border-top: 1px solid var(--border-color);">
+        </div>
+
+        <form id="form-login" onsubmit="handleEmailLogin(event)">
+          <div class="form-group" style="text-align: left;">
+            <label for="login-email">Email Address</label>
+            <input type="email" id="login-email" class="form-control" value="sivashirish09@gmail.com" required>
           </div>
 
-          <div class="search-field">
-            <label for="filter-budget">Max Budget (INR)</label>
-            <select id="filter-budget" onchange="handleSearchInput()">
-              <option value="">Any Budget</option>
-              <option value="15000">Under ₹15,000</option>
-              <option value="30000">Under ₹30,000</option>
-              <option value="60000">Under ₹60,000</option>
-              <option value="100000">Under ₹1,00,000</option>
-            </select>
+          <div class="form-group" style="text-align: left; position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+              <label for="login-password" style="margin-bottom: 0;">Password</label>
+              <a href="#" style="font-size: 0.78rem; color: var(--accent-blue); text-decoration: none;" onclick="showToast('Password reset link sent to your email')">Forgot Password?</a>
+            </div>
+            <div style="position: relative;">
+              <input type="password" id="login-password" class="form-control" value="password123" required>
+              <i class="fas fa-eye" id="toggle-pwd-icon" style="position: absolute; right: 0.9rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer;" onclick="togglePasswordVisibility()"></i>
+            </div>
           </div>
 
-          <div class="search-field">
-            <label for="filter-duration">Duration</label>
-            <select id="filter-duration" onchange="handleSearchInput()">
-              <option value="">Any Duration</option>
-              <option value="3">3 Days (Weekend)</option>
-              <option value="5">5+ Days (Vacation)</option>
-            </select>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; font-size: 0.82rem;">
+            <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer; color: var(--text-secondary);">
+              <input type="checkbox" id="login-remember" checked style="accent-color: var(--accent-blue);"> Remember Me
+            </label>
           </div>
 
-          <button class="btn btn-primary" onclick="handleSearchInput()">
-            <i class="fas fa-search"></i> Search
+          <button type="submit" class="btn btn-primary" id="btn-login-submit" style="width: 100%;">
+            <i class="fas fa-sign-in-alt"></i> Sign In to Home
           </button>
-        </div>
+        </form>
 
-        <!-- Category Pills -->
-        <div class="category-pills">
-          <button class="pill active" onclick="setCategoryFilter('All', this)">🌟 All Destinations</button>
-          <button class="pill" onclick="setCategoryFilter('Beach', this)">🏖️ Beach Escapes</button>
-          <button class="pill" onclick="setCategoryFilter('Hill Station', this)">⛰️ Hill Stations</button>
-          <button class="pill" onclick="setCategoryFilter('Adventure', this)">🧗 Adventure</button>
-          <button class="pill" onclick="setCategoryFilter('Heritage', this)">🏰 Heritage</button>
-          <button class="pill" onclick="setCategoryFilter('Luxury', this)">👑 Luxury</button>
-          <button class="pill" onclick="setCategoryFilter('Spiritual', this)">🛕 Spiritual</button>
-          <button class="pill" onclick="setCategoryFilter('Wildlife', this)">🐅 Wildlife</button>
-        </div>
+        <p style="margin-top: 1.25rem; font-size: 0.85rem; color: var(--text-secondary);">
+          Don't have an account? <a href="#" style="color: var(--accent-blue); font-weight: 700; text-decoration: none;" onclick="navigateTo('register')">Create Account</a>
+        </p>
       </div>
-    </section>
-
-    <!-- ==========================================================================
-         3. EXPLORE SECTION (INDIA & INTERNATIONAL TABS)
-         ========================================================================== -->
-    <section class="section-padding" id="destinations-section">
-      <div class="container">
-        <div class="section-header">
-          <div>
-            <h2 class="section-title">Explore Travel Destinations</h2>
-            <p class="section-subtitle">Covering destinations across all Indian States & Union Territories and major International travel hubs</p>
-          </div>
-        </div>
-
-        <!-- Major Subtabs: India vs International -->
-        <div class="subtabs-bar">
-          <button class="explore-subtab active" onclick="setExploreSubTab('all', this)">🌟 All Places</button>
-          <button class="explore-subtab" onclick="setExploreSubTab('india', this)">🇮🇳 Explore India (All States)</button>
-          <button class="explore-subtab" onclick="setExploreSubTab('international', this)">🌐 International Travel</button>
-        </div>
-
-        <!-- Dynamic Card Grid -->
-        <div class="destinations-grid" id="destinations-grid">
-          <!-- Rendered dynamically by app.js -->
-        </div>
-      </div>
-    </section>
-
-    <!-- ==========================================================================
-         4. AI TRIP PLANNER STUDIO
-         ========================================================================== -->
-    <section class="section-padding" id="ai-planner-section">
-      <div class="container">
-        <div class="ai-planner-wrapper">
-          <div class="planner-grid">
-            
-            <!-- Left: Inputs -->
-            <div>
-              <span class="badge-tag"><i class="fas fa-sparkles"></i> Gemini AI Trip Studio</span>
-              <h2 style="font-size: 1.8rem; margin-bottom: 0.4rem;">Create Personal AI Itinerary</h2>
-              <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 1.25rem;">
-                Specify your destination, style, and total budget to generate an automated day-by-day travel schedule.
-              </p>
-
-              <form id="ai-planner-form">
-                <div class="form-group">
-                  <label for="ai-dest">Destination Name</label>
-                  <input type="text" id="ai-dest" class="form-control" value="Goa" required>
-                </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
-                  <div class="form-group">
-                    <label for="ai-days">Duration (Days)</label>
-                    <input type="number" id="ai-days" class="form-control" value="4" min="1" max="14" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="ai-budget">Total Budget (INR)</label>
-                    <input type="number" id="ai-budget" class="form-control" value="25000" step="1000" required>
-                  </div>
-                </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
-                  <div class="form-group">
-                    <label for="ai-style">Travel Style</label>
-                    <select id="ai-style" class="form-control">
-                      <option value="Moderate">Moderate & Balanced</option>
-                      <option value="Luxury">Luxury Resort & Spa</option>
-                      <option value="Backpacker">Backpacker / Budget</option>
-                      <option value="Adventure">Adventure & Trekking</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label for="ai-members">Travelers</label>
-                    <input type="number" id="ai-members" class="form-control" value="2" min="1" max="10" required>
-                  </div>
-                </div>
-
-                <button type="submit" class="btn btn-primary" id="ai-submit-btn" style="width: 100%;">
-                  <i class="fas fa-magic"></i> Generate Custom AI Itinerary
-                </button>
-              </form>
-            </div>
-
-            <!-- Right: Output -->
-            <div id="ai-output-box">
-              <div class="itinerary-card" style="justify-content: center; align-items: center; text-align: center; color: var(--text-muted);">
-                <i class="fas fa-robot" style="font-size: 3.2rem; color: var(--accent-blue); margin-bottom: 0.8rem;"></i>
-                <h3>Ready to Plan Your Journey</h3>
-                <p style="font-size: 0.88rem; max-width: 300px; margin-top: 0.4rem;">
-                  Fill in the details on the left and click <strong>Generate</strong> to receive your Gemini AI trip schedule.
-                </p>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==========================================================================
-         5. SAVED TRIPS SECTION
-         ========================================================================== -->
-    <section class="section-padding" id="saved-section">
-      <div class="container">
-        <div class="section-header">
-          <div>
-            <h2 class="section-title">Saved Trips & Wishlist</h2>
-            <p class="section-subtitle">Your saved destinations, resorts, and AI itineraries</p>
-          </div>
-        </div>
-
-        <div class="destinations-grid" id="saved-grid">
-          <!-- Rendered by app.js -->
-        </div>
-      </div>
-    </section>
-
-    <!-- ==========================================================================
-         6. PROFILE & MY BOOKINGS DASHBOARD
-         ========================================================================== -->
-    <section class="section-padding" id="profile-section">
-      <div class="container">
-        <!-- Profile Header -->
-        <div style="background: #ffffff; padding: 1.75rem; border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.25rem;">
-          <div style="display: flex; align-items: center; gap: 1.25rem;">
-            <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--accent-blue); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 800;">
-              S
-            </div>
-            <div>
-              <h2 style="font-size: 1.5rem;">Siva Shirish <span style="font-size: 0.8rem; color: var(--accent-green); background: #ecfdf5; padding: 0.2rem 0.5rem; border-radius: 99px;">Verified</span></h2>
-              <p style="color: var(--text-secondary); font-size: 0.88rem;">sivashirish09@gmail.com | +91 98765 43210</p>
-              <p style="font-size: 0.8rem; color: var(--accent-blue); font-weight: 600; margin-top: 0.2rem;">Gold Explorer 🧭 | 1,450 Reward Points</p>
-            </div>
-          </div>
-
-          <div style="display: flex; gap: 0.6rem;">
-            <button class="btn btn-secondary btn-sm" onclick="showToast('Profile editing enabled')"><i class="fas fa-edit"></i> Edit</button>
-            <button class="btn btn-secondary btn-sm" onclick="openAuthModal()"><i class="fas fa-sign-in-alt"></i> Auth</button>
-          </div>
-        </div>
-
-        <!-- My Bookings Header -->
-        <div class="section-header">
-          <div>
-            <h2 class="section-title">My Bookings & QR Tickets</h2>
-            <p class="section-subtitle">Manage active reservations, digital tickets, and cancellation requests</p>
-          </div>
-          <button class="btn btn-secondary btn-sm" onclick="renderBookings()">
-            <i class="fas fa-sync-alt"></i> Refresh
-          </button>
-        </div>
-
-        <div style="display: flex; flex-direction: column; gap: 1.25rem;" id="bookings-container">
-          <!-- Rendered dynamically by app.js -->
-        </div>
-
-        <!-- Expense Tracker Subsection -->
-        <div style="margin-top: 3rem;">
-          <h3 style="font-size: 1.3rem; margin-bottom: 1rem;"><i class="fas fa-calculator" style="color: var(--accent-blue);"></i> Trip Expense Tracker</h3>
-          <div id="expenses-list">
-            <!-- Rendered by app.js -->
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- ==========================================================================
-       7. FIXED MOBILE BOTTOM NAVIGATION BAR & DESKTOP CENTERED BAR
-       ========================================================================== -->
-  <nav class="bottom-nav-bar" id="nav-bottom-bar">
-    <a href="#home-section" class="nav-tab-item active" id="tab-home" onclick="navigateTo('home')">
-      <i class="fas fa-home"></i>
-      <span>Home</span>
-    </a>
-    <a href="#destinations-section" class="nav-tab-item" id="tab-explore" onclick="navigateTo('explore')">
-      <i class="fas fa-compass"></i>
-      <span>Explore</span>
-    </a>
-    <a href="#ai-planner-section" class="nav-tab-item" id="tab-ai-plan" onclick="navigateTo('ai-plan')">
-      <i class="fas fa-sparkles"></i>
-      <span>AI Plan</span>
-    </a>
-    <a href="#saved-section" class="nav-tab-item" id="tab-saved" onclick="navigateTo('saved')">
-      <i class="fas fa-bookmark"></i>
-      <span>Saved</span>
-    </a>
-    <a href="#profile-section" class="nav-tab-item" id="tab-profile" onclick="navigateTo('profile')">
-      <i class="fas fa-user-circle"></i>
-      <span>Profile</span>
-    </a>
-  </nav>
-
-  <!-- ==========================================================================
-       8. MODALS & DIALOGS
-       ========================================================================== -->
-  <!-- Auth Modal -->
-  <div class="modal-overlay" id="auth-modal">
-    <div class="modal-container" style="max-width: 420px; text-align: center;">
-      <button class="modal-close" onclick="closeAuthModal()">&times;</button>
-      <div style="margin-bottom: 1.25rem;">
-        <div class="brand-icon" style="margin: 0 auto 0.6rem auto; width: 44px; height: 44px;">
-          <i class="fas fa-compass"></i>
-        </div>
-        <h2 style="font-size: 1.4rem;">Welcome to TravelNest</h2>
-        <p style="font-size: 0.85rem; color: var(--text-secondary);">Sign in to sync saved trips and bookings</p>
-      </div>
-
-      <button class="btn btn-secondary" id="btn-google-login" style="width: 100%; padding: 0.75rem; margin-bottom: 1rem; font-size: 0.92rem; justify-content: center; box-shadow: var(--shadow-sm);">
-        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style="width: 18px; height: 18px; margin-right: 0.5rem;">
-        Continue with Google
-      </button>
-
-      <div style="display: flex; align-items: center; margin: 0.8rem 0; color: var(--text-muted); font-size: 0.78rem;">
-        <hr style="flex: 1; border: none; border-top: 1px solid var(--border-color);">
-        <span style="padding: 0 0.5rem;">OR EMAIL</span>
-        <hr style="flex: 1; border: none; border-top: 1px solid var(--border-color);">
-      </div>
-
-      <div class="form-group" style="text-align: left;">
-        <label for="auth-email">Email Address</label>
-        <input type="email" id="auth-email" class="form-control" value="sivashirish09@gmail.com">
-      </div>
-      <div class="form-group" style="text-align: left;">
-        <label for="auth-password">Password</label>
-        <input type="password" id="auth-password" class="form-control" value="••••••••">
-      </div>
-
-      <button class="btn btn-primary" style="width: 100%;" onclick="handleGoogleLogin()">
-        Sign In with Email
-      </button>
     </div>
   </div>
 
+  <!-- ==========================================================================
+       2. REGISTER VIEW
+       ========================================================================== -->
+  <div id="view-register" class="app-view view-hidden">
+    <div class="auth-card-container" style="max-width: 480px;">
+      <div class="auth-body" style="padding: 2rem;">
+        <h2 style="font-size: 1.4rem; margin-bottom: 0.25rem;">Create Your TravelNest Account</h2>
+        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.25rem;">
+          Join thousands of travelers exploring India & International destinations.
+        </p>
+
+        <form id="form-register" onsubmit="handleRegister(event)">
+          <div class="form-group" style="text-align: left;">
+            <label for="reg-name">Full Name</label>
+            <input type="text" id="reg-name" class="form-control" placeholder="Siva Shirish" required>
+          </div>
+          <div class="form-group" style="text-align: left;">
+            <label for="reg-email">Email Address</label>
+            <input type="email" id="reg-email" class="form-control" placeholder="sivashirish09@gmail.com" required>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
+            <div class="form-group" style="text-align: left;">
+              <label for="reg-phone">Phone Number</label>
+              <input type="tel" id="reg-phone" class="form-control" placeholder="+91 98765 43210">
+            </div>
+            <div class="form-group" style="text-align: left;">
+              <label for="reg-style">Travel Style</label>
+              <select id="reg-style" class="form-control">
+                <option value="Moderate">Moderate</option>
+                <option value="Luxury">Luxury</option>
+                <option value="Backpacker">Backpacker</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group" style="text-align: left;">
+            <label for="reg-password">Password</label>
+            <input type="password" id="reg-password" class="form-control" placeholder="••••••••" required>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">
+            <i class="fas fa-user-plus"></i> Create Account & Start Exploring
+          </button>
+        </form>
+
+        <p style="margin-top: 1.25rem; font-size: 0.85rem; color: var(--text-secondary);">
+          Already have an account? <a href="#" style="color: var(--accent-blue); font-weight: 700; text-decoration: none;" onclick="navigateTo('login')">Sign In</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       3. MAIN APPLICATION VIEW (AFTER AUTHENTICATION)
+       ========================================================================== -->
+  <div id="view-main" class="app-view view-hidden">
+    <!-- Top Brand Bar -->
+    <header class="top-brand-header">
+      <div class="container" style="display: flex; align-items: center; justify-content: space-between;">
+        <a href="#" class="brand-logo" onclick="navigateTo('home')">
+          <div class="brand-icon">
+            <i class="fas fa-compass"></i>
+          </div>
+          <span>Travel<span class="gradient-text">Nest</span></span>
+        </a>
+
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <button class="btn btn-secondary btn-sm" id="user-profile-btn" onclick="navigateTo('profile')">
+            <i class="fas fa-user-circle"></i> Siva Shirish
+          </button>
+          <button class="btn btn-primary btn-sm" onclick="navigateTo('ai-plan')">
+            <i class="fas fa-sparkles"></i> AI Plan
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- HERO & SEARCH -->
+      <section class="hero-section" id="home-section">
+        <div class="container">
+          <span class="badge-tag">
+            <i class="fas fa-robot"></i> Powered by Gemini AI & PostgreSQL Database
+          </span>
+
+          <h1 class="hero-title">
+            Plan Smarter. <span class="gradient-text">Travel Better.</span>
+          </h1>
+
+          <p class="hero-subtitle">
+            Discover destinations across India's 36 States & UTs and major International travel hubs, create AI-powered itineraries, and manage your complete trip.
+          </p>
+
+          <!-- Search Box -->
+          <div class="search-box">
+            <div class="search-field">
+              <label for="search-input">Location / Destination / State</label>
+              <input type="text" id="search-input" placeholder="e.g. Goa, Kerala, Leh, Kashmir, Rajasthan, Maldives..." autocomplete="off">
+            </div>
+
+            <div class="search-field">
+              <label for="filter-budget">Max Budget (INR)</label>
+              <select id="filter-budget" onchange="handleSearchInput()">
+                <option value="">Any Budget</option>
+                <option value="15000">Under ₹15,000</option>
+                <option value="30000">Under ₹30,000</option>
+                <option value="60000">Under ₹60,000</option>
+                <option value="100000">Under ₹1,00,000</option>
+              </select>
+            </div>
+
+            <div class="search-field">
+              <label for="filter-duration">Duration</label>
+              <select id="filter-duration" onchange="handleSearchInput()">
+                <option value="">Any Duration</option>
+                <option value="3">3 Days (Weekend)</option>
+                <option value="5">5+ Days (Vacation)</option>
+              </select>
+            </div>
+
+            <button class="btn btn-primary" onclick="handleSearchInput()">
+              <i class="fas fa-search"></i> Search
+            </button>
+          </div>
+
+          <!-- Category Pills -->
+          <div class="category-pills">
+            <button class="pill active" onclick="setCategoryFilter('All', this)">🌟 All Destinations</button>
+            <button class="pill" onclick="setCategoryFilter('Beach', this)">🏖️ Beach Escapes</button>
+            <button class="pill" onclick="setCategoryFilter('Hill Station', this)">⛰️ Hill Stations</button>
+            <button class="pill" onclick="setCategoryFilter('Adventure', this)">🧗 Adventure</button>
+            <button class="pill" onclick="setCategoryFilter('Heritage', this)">🏰 Heritage</button>
+            <button class="pill" onclick="setCategoryFilter('Luxury', this)">👑 Luxury</button>
+            <button class="pill" onclick="setCategoryFilter('Spiritual', this)">🛕 Spiritual</button>
+            <button class="pill" onclick="setCategoryFilter('Wildlife', this)">🐅 Wildlife</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- EXPLORE SECTION -->
+      <section class="section-padding" id="destinations-section">
+        <div class="container">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Explore Travel Destinations</h2>
+              <p class="section-subtitle">Covering destinations across all Indian States & Union Territories and major International travel hubs</p>
+            </div>
+          </div>
+
+          <div class="subtabs-bar">
+            <button class="explore-subtab active" onclick="setExploreSubTab('all', this)">🌟 All Places</button>
+            <button class="explore-subtab" onclick="setExploreSubTab('india', this)">🇮🇳 Explore India (All States)</button>
+            <button class="explore-subtab" onclick="setExploreSubTab('international', this)">🌐 International Travel</button>
+          </div>
+
+          <div class="destinations-grid" id="destinations-grid"></div>
+        </div>
+      </section>
+
+      <!-- AI TRIP PLANNER STUDIO -->
+      <section class="section-padding" id="ai-planner-section">
+        <div class="container">
+          <div class="ai-planner-wrapper">
+            <div class="planner-grid">
+              <div>
+                <span class="badge-tag"><i class="fas fa-sparkles"></i> Gemini AI Trip Studio</span>
+                <h2 style="font-size: 1.8rem; margin-bottom: 0.4rem;">Create Personal AI Itinerary</h2>
+                <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 1.25rem;">
+                  Specify your destination, style, and total budget to generate an automated day-by-day travel schedule.
+                </p>
+
+                <form id="ai-planner-form">
+                  <div class="form-group">
+                    <label for="ai-dest">Destination Name</label>
+                    <input type="text" id="ai-dest" class="form-control" value="Goa" required>
+                  </div>
+
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
+                    <div class="form-group">
+                      <label for="ai-days">Duration (Days)</label>
+                      <input type="number" id="ai-days" class="form-control" value="4" min="1" max="14" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="ai-budget">Total Budget (INR)</label>
+                      <input type="number" id="ai-budget" class="form-control" value="25000" step="1000" required>
+                    </div>
+                  </div>
+
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
+                    <div class="form-group">
+                      <label for="ai-style">Travel Style</label>
+                      <select id="ai-style" class="form-control">
+                        <option value="Moderate">Moderate & Balanced</option>
+                        <option value="Luxury">Luxury Resort & Spa</option>
+                        <option value="Backpacker">Backpacker / Budget</option>
+                        <option value="Adventure">Adventure & Trekking</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="ai-members">Travelers</label>
+                      <input type="number" id="ai-members" class="form-control" value="2" min="1" max="10" required>
+                    </div>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary" id="ai-submit-btn" style="width: 100%;">
+                    <i class="fas fa-magic"></i> Generate Custom AI Itinerary
+                  </button>
+                </form>
+              </div>
+
+              <div id="ai-output-box">
+                <div class="itinerary-card" style="justify-content: center; align-items: center; text-align: center; color: var(--text-muted);">
+                  <i class="fas fa-robot" style="font-size: 3.2rem; color: var(--accent-blue); margin-bottom: 0.8rem;"></i>
+                  <h3>Ready to Plan Your Journey</h3>
+                  <p style="font-size: 0.88rem; max-width: 300px; margin-top: 0.4rem;">
+                    Fill in the details on the left and click <strong>Generate</strong> to receive your Gemini AI trip schedule.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SAVED TRIPS SECTION -->
+      <section class="section-padding" id="saved-section">
+        <div class="container">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Saved Trips & Wishlist</h2>
+              <p class="section-subtitle">Your saved destinations, resorts, and AI itineraries</p>
+            </div>
+          </div>
+          <div class="destinations-grid" id="saved-grid"></div>
+        </div>
+      </section>
+
+      <!-- PROFILE & MY BOOKINGS DASHBOARD -->
+      <section class="section-padding" id="profile-section">
+        <div class="container">
+          <div style="background: #ffffff; padding: 1.75rem; border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.25rem;">
+            <div style="display: flex; align-items: center; gap: 1.25rem;">
+              <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--accent-blue); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 800;">
+                S
+              </div>
+              <div>
+                <h2 style="font-size: 1.5rem;" id="user-display-name">Siva Shirish <span style="font-size: 0.8rem; color: var(--accent-green); background: #ecfdf5; padding: 0.2rem 0.5rem; border-radius: 99px;">Verified</span></h2>
+                <p style="color: var(--text-secondary); font-size: 0.88rem;" id="user-display-email">sivashirish09@gmail.com | +91 98765 43210</p>
+                <p style="font-size: 0.8rem; color: var(--accent-blue); font-weight: 600; margin-top: 0.2rem;">Gold Explorer 🧭 | 1,450 Reward Points</p>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 0.6rem;">
+              <button class="btn btn-secondary btn-sm" onclick="showToast('Profile editing enabled')"><i class="fas fa-edit"></i> Edit</button>
+              <button class="btn btn-danger btn-sm" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+          </div>
+
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">My Bookings & QR Tickets</h2>
+              <p class="section-subtitle">Manage active reservations, digital tickets, and cancellation requests</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="renderBookings()">
+              <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 1.25rem;" id="bookings-container"></div>
+
+          <div style="margin-top: 3rem;">
+            <h3 style="font-size: 1.3rem; margin-bottom: 1rem;"><i class="fas fa-calculator" style="color: var(--accent-blue);"></i> Trip Expense Tracker</h3>
+            <div id="expenses-list"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- FIXED MOBILE BOTTOM NAVIGATION BAR & DESKTOP CENTERED BAR -->
+    <nav class="bottom-nav-bar" id="nav-bottom-bar">
+      <a href="#home-section" class="nav-tab-item active" id="tab-home" onclick="navigateTo('home')">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="#destinations-section" class="nav-tab-item" id="tab-explore" onclick="navigateTo('explore')">
+        <i class="fas fa-compass"></i>
+        <span>Explore</span>
+      </a>
+      <a href="#ai-planner-section" class="nav-tab-item" id="tab-ai-plan" onclick="navigateTo('ai-plan')">
+        <i class="fas fa-sparkles"></i>
+        <span>AI Plan</span>
+      </a>
+      <a href="#saved-section" class="nav-tab-item" id="tab-saved" onclick="navigateTo('saved')">
+        <i class="fas fa-bookmark"></i>
+        <span>Saved</span>
+      </a>
+      <a href="#profile-section" class="nav-tab-item" id="tab-profile" onclick="navigateTo('profile')">
+        <i class="fas fa-user-circle"></i>
+        <span>Profile</span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- ==========================================================================
+       4. MODALS & DIALOGS
+       ========================================================================== -->
   <!-- Detail Modal -->
   <div class="modal-overlay" id="detail-modal">
     <div class="modal-container" style="max-width: 660px;">
