@@ -3,25 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TravelNest — AI-Powered Trip Planner & Hotel Booking Platform</title>
-  <meta name="description" content="Discover India's top travel destinations, plan custom itineraries with Gemini AI, and book verified hotels with instant QR tickets.">
-  <meta name="theme-color" content="#0b0f19">
+  <title>TravelNest — Smart Trip Planner & Hotel Booking Ecosystem</title>
+  <meta name="description" content="Explore India and International travel destinations, create AI itineraries with Gemini, and manage complete bookings with digital QR tickets.">
+  <meta name="theme-color" content="#2563eb">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="TravelNest — AI Trip Planner">
-  <meta property="og:description" content="AI-driven itinerary generation, hotel booking, and seamless travel management.">
+  <meta property="og:title" content="TravelNest — Smart Trip Planner">
+  <meta property="og:description" content="AI trip planning, hotel bookings, expense tracking, and travel profile management.">
   <meta property="og:image" content="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=1200&q=80">
 
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
-  <!-- Custom Design System Stylesheet -->
+  <!-- Custom Light Theme Stylesheet -->
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
   <!-- ==========================================================================
-       1. HEADER & NAVIGATION BAR
+       1. NAVIGATION BAR (STRICTLY 5 TABS: HOME, EXPLORE, AI PLAN, SAVED, PROFILE)
        ========================================================================== -->
   <header class="navbar" id="main-header">
     <div class="container nav-container">
@@ -33,17 +33,19 @@
       </a>
 
       <ul class="nav-menu" id="nav-menu">
-        <li><a href="#destinations-section" class="nav-link active" id="nav-destinations"><i class="fas fa-map-marked-alt"></i> Destinations</a></li>
-        <li><a href="#ai-planner-section" class="nav-link" id="nav-ai-planner"><i class="fas fa-magic"></i> AI Trip Planner</a></li>
-        <li><a href="#bookings-section" class="nav-link" id="nav-bookings"><i class="fas fa-ticket-alt"></i> My Bookings</a></li>
+        <li><a href="#home-section" class="nav-link active" onclick="switchNavTab('home', this)" id="nav-home"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="#destinations-section" class="nav-link" onclick="switchNavTab('destinations', this)" id="nav-explore"><i class="fas fa-compass"></i> Explore</a></li>
+        <li><a href="#ai-planner-section" class="nav-link" onclick="switchNavTab('ai-planner', this)" id="nav-ai-plan"><i class="fas fa-sparkles"></i> AI Plan</a></li>
+        <li><a href="#saved-section" class="nav-link" onclick="switchNavTab('saved', this)" id="nav-saved"><i class="fas fa-bookmark"></i> Saved Trips</a></li>
+        <li><a href="#profile-section" class="nav-link" onclick="switchNavTab('profile', this)" id="nav-profile"><i class="fas fa-user-circle"></i> Profile</a></li>
       </ul>
 
       <div class="nav-actions">
-        <button class="btn btn-secondary btn-sm" id="user-profile-btn" onclick="showToast('Logged in as Siva Shirish (sivashirish09@gmail.com)')">
+        <button class="btn btn-secondary btn-sm" id="user-profile-btn" onclick="switchNavTab('profile')">
           <i class="fas fa-user-circle"></i> Siva Shirish
         </button>
         <a href="#ai-planner-section" class="btn btn-primary btn-sm" id="btn-header-plan">
-          <i class="fas fa-sparkles"></i> Plan Trip
+          <i class="fas fa-magic"></i> Plan with AI
         </a>
       </div>
     </div>
@@ -51,36 +53,36 @@
 
   <main>
     <!-- ==========================================================================
-         2. HERO SECTION & LIVE SEARCH FILTER
+         2. HERO SECTION & SMART SEARCH
          ========================================================================== -->
-    <section class="hero-section" id="hero-banner">
+    <section class="hero-section" id="home-section">
       <div class="container">
         <span class="badge-tag" id="hero-badge">
-          <i class="fas fa-bolt"></i> Powered by Gemini AI & FastAPI
+          <i class="fas fa-robot"></i> Powered by Gemini AI & PostgreSQL Database
         </span>
 
         <h1 class="hero-title" id="hero-heading">
-          Explore India with <br><span class="gradient-text">Smart AI Travel Intelligence</span>
+          Plan Smarter. <span class="gradient-text">Travel Better.</span>
         </h1>
 
         <p class="hero-subtitle" id="hero-subheading">
-          Instant customized itineraries, curated luxury resorts, and verified QR code bookings for your dream vacation.
+          Discover destinations across India and International hubs, create AI-powered itineraries, find the perfect stay, and manage your complete trip in one place.
         </p>
 
-        <!-- Search & Filter Box -->
+        <!-- Search Box -->
         <div class="search-box" id="search-box-container">
           <div class="search-field">
-            <label for="search-input">Destination / State</label>
-            <input type="text" id="search-input" placeholder="e.g. Goa, Manali, Jaipur..." autocomplete="off">
+            <label for="search-input">Location / Destination</label>
+            <input type="text" id="search-input" placeholder="e.g. Goa, Maldives, Jaipur, Paris..." autocomplete="off">
           </div>
 
           <div class="search-field">
             <label for="filter-budget">Max Budget (INR)</label>
             <select id="filter-budget" onchange="handleSearchInput()">
               <option value="">Any Budget</option>
-              <option value="15000">Under ₹15,000</option>
-              <option value="25000">Under ₹25,000</option>
+              <option value="20000">Under ₹20,000</option>
               <option value="50000">Under ₹50,000</option>
+              <option value="100000">Under ₹1,00,000</option>
             </select>
           </div>
 
@@ -101,27 +103,33 @@
         <!-- Category Pills -->
         <div class="category-pills" id="category-pills-bar">
           <button class="pill active" onclick="setCategoryFilter('All', this)">🌟 All Destinations</button>
-          <button class="pill" onclick="setCategoryFilter('Beach', this)">🏖️ Beach</button>
-          <button class="pill" onclick="setCategoryFilter('Hill Station', this)">⛰️ Hill Station</button>
+          <button class="pill" onclick="setCategoryFilter('Beach', this)">🏖️ Beach Escapes</button>
+          <button class="pill" onclick="setCategoryFilter('Hill Station', this)">⛰️ Hill Stations</button>
           <button class="pill" onclick="setCategoryFilter('Adventure', this)">🧗 Adventure</button>
           <button class="pill" onclick="setCategoryFilter('Heritage', this)">🏰 Heritage</button>
+          <button class="pill" onclick="setCategoryFilter('Luxury', this)">👑 Luxury</button>
           <button class="pill" onclick="setCategoryFilter('Backwaters', this)">🛶 Backwaters</button>
-          <button class="pill" onclick="setCategoryFilter('Spiritual', this)">🛕 Spiritual</button>
         </div>
       </div>
     </section>
 
     <!-- ==========================================================================
-         3. FEATURED DESTINATIONS GRID
+         3. EXPLORE SECTION (INDIA & INTERNATIONAL TABS)
          ========================================================================== -->
     <section class="section-padding" id="destinations-section">
       <div class="container">
         <div class="section-header">
           <div>
-            <h2 class="section-title" id="destinations-title">Popular Destinations in India</h2>
-            <p class="section-subtitle" id="destinations-subtitle">Curated spots with verified ratings, weather insights, and est. costs</p>
+            <h2 class="section-title" id="destinations-title">Explore Travel Destinations</h2>
+            <p class="section-subtitle" id="destinations-subtitle">Browse destinations across India and major International tourism hubs</p>
           </div>
-          <span style="color: var(--accent-primary); font-weight: 600; font-size: 0.9rem;">8 Verified Locations</span>
+        </div>
+
+        <!-- Major Tabs: India vs International -->
+        <div class="subtabs-bar">
+          <button class="explore-subtab active" onclick="setExploreSubTab('all', this)">🌟 All Places</button>
+          <button class="explore-subtab" onclick="setExploreSubTab('india', this)">🇮🇳 Explore India</button>
+          <button class="explore-subtab" onclick="setExploreSubTab('international', this)">🌐 International Travel</button>
         </div>
 
         <!-- Dynamic Grid -->
@@ -141,15 +149,15 @@
             
             <!-- Left: Inputs -->
             <div>
-              <span class="badge-tag" style="margin-bottom: 0.75rem;"><i class="fas fa-sparkles"></i> AI Engine</span>
-              <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">Gemini AI Itinerary Creator</h2>
+              <span class="badge-tag" style="margin-bottom: 0.75rem;"><i class="fas fa-sparkles"></i> Gemini AI Intelligence</span>
+              <h2 style="font-size: 1.85rem; margin-bottom: 0.5rem;">Create Personal AI Itinerary</h2>
               <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem;">
-                Specify your travel style and budget. Our AI generates an optimized day-by-day itinerary with exact cost breakdown.
+                Specify your destination, style, and total budget to generate an automated day-by-day travel plan.
               </p>
 
               <form id="ai-planner-form">
                 <div class="form-group">
-                  <label for="ai-dest">Target Destination</label>
+                  <label for="ai-dest">Destination Name</label>
                   <input type="text" id="ai-dest" class="form-control" value="Goa" required>
                 </div>
 
@@ -175,7 +183,7 @@
                     </select>
                   </div>
                   <div class="form-group">
-                    <label for="ai-members">Number of Travelers</label>
+                    <label for="ai-members">Travelers</label>
                     <input type="number" id="ai-members" class="form-control" value="2" min="1" max="10" required>
                   </div>
                 </div>
@@ -186,13 +194,13 @@
               </form>
             </div>
 
-            <!-- Right: Itinerary Display Output -->
+            <!-- Right: Output -->
             <div id="ai-output-box">
               <div class="itinerary-card" style="justify-content: center; align-items: center; text-align: center; color: var(--text-muted);">
-                <i class="fas fa-robot" style="font-size: 3.5rem; color: var(--accent-primary); margin-bottom: 1rem; opacity: 0.7;"></i>
-                <h3>Ready to Plan Your Unique Journey</h3>
+                <i class="fas fa-robot" style="font-size: 3.5rem; color: var(--accent-primary); margin-bottom: 1rem;"></i>
+                <h3>Ready to Plan Your Journey</h3>
                 <p style="font-size: 0.9rem; max-width: 320px; margin-top: 0.4rem;">
-                  Fill in the details on the left and click <strong>Generate</strong> to receive your Gemini AI personalized trip schedule.
+                  Fill in the details on the left and click <strong>Generate</strong> to receive your Gemini AI trip schedule.
                 </p>
               </div>
             </div>
@@ -203,37 +211,94 @@
     </section>
 
     <!-- ==========================================================================
-         5. MY BOOKINGS & QR TICKET HUB
+         5. SAVED TRIPS SECTION
          ========================================================================== -->
-    <section class="section-padding" id="bookings-section">
+    <section class="section-padding" id="saved-section">
       <div class="container">
         <div class="section-header">
           <div>
-            <h2 class="section-title" id="bookings-title">My Travel Bookings & QR Tickets</h2>
-            <p class="section-subtitle" id="bookings-subtitle">Manage your active reservations, digital tickets, and cancellation requests</p>
+            <h2 class="section-title">Saved Trips & Wishlist</h2>
+            <p class="section-subtitle">Your saved destinations, resorts, and AI itineraries</p>
+          </div>
+        </div>
+
+        <div class="destinations-grid" id="saved-grid">
+          <!-- Rendered by app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         6. PROFILE & MY BOOKINGS DASHBOARD
+         ========================================================================== -->
+    <section class="section-padding" id="profile-section">
+      <div class="container">
+        <!-- Profile Header -->
+        <div style="background: #ffffff; padding: 2rem; border-radius: var(--radius-lg); border: 1px solid var(--border-glass); box-shadow: var(--shadow-sm); margin-bottom: 2.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem;">
+          <div style="display: flex; align-items: center; gap: 1.5rem;">
+            <div style="width: 72px; height: 72px; border-radius: 50%; background: var(--accent-primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800;">
+              S
+            </div>
+            <div>
+              <h2 style="font-size: 1.6rem;">Siva Shirish <span style="font-size: 0.85rem; color: var(--accent-green); background: var(--success-bg); padding: 0.2rem 0.6rem; border-radius: 99px;">Verified</span></h2>
+              <p style="color: var(--text-secondary); font-size: 0.9rem;">sivashirish09@gmail.com | +91 98765 43210</p>
+              <p style="font-size: 0.82rem; color: var(--accent-primary); font-weight: 600; margin-top: 0.25rem;">Gold Explorer 🧭 | 1,450 Reward Points</p>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 0.75rem;">
+            <button class="btn btn-secondary btn-sm" onclick="showToast('Profile editing enabled')"><i class="fas fa-edit"></i> Edit Profile</button>
+            <button class="btn btn-secondary btn-sm" onclick="showToast('Logged out')"><i class="fas fa-sign-out-alt"></i> Logout</button>
+          </div>
+        </div>
+
+        <!-- My Bookings Header -->
+        <div class="section-header">
+          <div>
+            <h2 class="section-title" id="bookings-title">My Bookings & QR Tickets</h2>
+            <p class="section-subtitle" id="bookings-subtitle">Manage active reservations, digital tickets, and cancellation requests</p>
           </div>
           <button class="btn btn-secondary btn-sm" onclick="renderBookings()">
-            <i class="fas fa-sync-alt"></i> Refresh Tickets
+            <i class="fas fa-sync-alt"></i> Refresh
           </button>
         </div>
 
         <div class="bookings-list" id="bookings-container">
           <!-- Rendered dynamically by app.js -->
         </div>
+
+        <!-- Expense Tracker Subsection -->
+        <div style="margin-top: 3.5rem;">
+          <h3 style="font-size: 1.4rem; margin-bottom: 1rem;"><i class="fas fa-calculator" style="color: var(--accent-primary);"></i> Trip Expense Tracker</h3>
+          <div id="expenses-list">
+            <!-- Rendered by app.js -->
+          </div>
+        </div>
       </div>
     </section>
-
   </main>
 
   <!-- ==========================================================================
-       6. INTERACTIVE BOOKING MODAL
+       7. DESTINATION DETAIL MODAL
+       ========================================================================== -->
+  <div class="modal-overlay" id="detail-modal">
+    <div class="modal-container" style="max-width: 680px;">
+      <button class="modal-close" onclick="closeDetailModal()">&times;</button>
+      <div id="detail-modal-body">
+        <!-- Rendered by app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       8. BOOKING CHECKOUT MODAL
        ========================================================================== -->
   <div class="modal-overlay" id="booking-modal">
     <div class="modal-container">
       <button class="modal-close" onclick="closeBookingModal()">&times;</button>
       <h2 id="modal-dest-title" style="font-size: 1.5rem; margin-bottom: 0.25rem;">Book Destination Trip</h2>
       <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 1.5rem;">
-        Rate per night: <strong id="modal-price-per-night" style="color: var(--accent-primary);">₹0</strong>
+        Price per night: <strong id="modal-price-per-night" style="color: var(--accent-primary);">₹0</strong>
       </p>
 
       <form id="booking-form">
@@ -264,13 +329,13 @@
           </div>
         </div>
 
-        <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); padding: 1rem; border-radius: var(--radius-md); margin: 1rem 0; display: flex; justify-content: space-between; align-items: center;">
-          <span>Total Payable Amount (Taxes incl.)</span>
+        <div style="background: var(--bg-secondary); border: 1px solid var(--border-glass); padding: 1rem; border-radius: var(--radius-md); margin: 1rem 0; display: flex; justify-content: space-between; align-items: center;">
+          <span>Total Amount Payable (Taxes incl.)</span>
           <span id="modal-total-price" style="font-size: 1.4rem; font-weight: 800; color: var(--success);">₹0</span>
         </div>
 
         <button type="submit" class="btn btn-primary" style="width: 100%;">
-          <i class="fas fa-check-circle"></i> Confirm & Generate QR Ticket
+          <i class="fas fa-check-circle"></i> Confirm Booking & Generate Ticket
         </button>
       </form>
     </div>
@@ -282,7 +347,7 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <p>© 2026 TravelNest Application. Built with FastAPI Backend, PostgreSQL Database, and Gemini AI.</p>
+      <p>© 2026 TravelNest Application. Full-Stack Architecture with FastAPI Backend, PostgreSQL Database, and Gemini AI.</p>
     </div>
   </footer>
 

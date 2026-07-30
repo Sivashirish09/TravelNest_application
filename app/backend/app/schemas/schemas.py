@@ -8,6 +8,8 @@ class UserRegisterRequest(BaseModel):
     email: EmailStr
     password: str
     phone: Optional[str] = None
+    preferred_budget: Optional[int] = 25000
+    travel_style: Optional[str] = "Moderate"
 
 class UserLoginRequest(BaseModel):
     email: EmailStr
@@ -28,12 +30,15 @@ class UserProfileResponse(BaseModel):
     avatar_url: Optional[str] = None
     preferred_budget: int
     travel_style: str
+    traveler_level: str = "Gold Explorer"
+    reward_points: int = 1250
 
 # --- Destinations ---
 class DestinationResponse(BaseModel):
     id: str
     name: str
-    state: str
+    country: str = "India"
+    state: Optional[str] = None
     description: str
     image_url: str
     best_season: str
@@ -43,6 +48,11 @@ class DestinationResponse(BaseModel):
     rating: float
     review_count: int
     category: str
+    is_international: bool = False
+    currency_code: str = "INR"
+    exchange_rate_inr: float = 1.0
+    nearest_airport: Optional[str] = None
+    nearest_railway: Optional[str] = None
     latitude: float
     longitude: float
 
@@ -67,6 +77,7 @@ class HotelResponse(BaseModel):
 # --- Bookings ---
 class CreateBookingRequest(BaseModel):
     destination_name: str
+    country: Optional[str] = "India"
     hotel_or_resort_name: str
     type: str # Hotel or Resort
     check_in_date: str
@@ -77,10 +88,14 @@ class CreateBookingRequest(BaseModel):
     payment_method: str = "UPI (Google Pay)"
     image_url: str
 
+class CancelBookingRequest(BaseModel):
+    reason: Optional[str] = "Plans changed"
+
 class BookingResponse(BaseModel):
     id: str
     user_id: str
     destination_name: str
+    country: str = "India"
     hotel_or_resort_name: str
     type: str
     booking_reference: str
@@ -93,8 +108,29 @@ class BookingResponse(BaseModel):
     payment_method: str
     payment_status: str
     status: str
+    cancellation_reason: Optional[str] = None
+    refund_amount_inr: int = 0
     qr_code_url: str
     image_url: str
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+# --- Expenses ---
+class ExpenseCreateRequest(BaseModel):
+    booking_id: str
+    category: str
+    title: str
+    amount_inr: int
+
+class ExpenseResponse(BaseModel):
+    id: str
+    booking_id: str
+    user_id: str
+    category: str
+    title: str
+    amount_inr: int
     created_at: datetime
 
     class Config:

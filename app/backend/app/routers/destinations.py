@@ -12,12 +12,15 @@ def get_destinations(
     query: Optional[str] = None,
     category: Optional[str] = None,
     state: Optional[str] = None,
+    is_international: Optional[bool] = None,
     max_budget: Optional[int] = None,
     db: Session = Depends(get_db)
 ):
     q = db.query(Destination)
+    if is_international is not None:
+        q = q.filter(Destination.is_international == is_international)
     if query:
-        q = q.filter(Destination.name.ilike(f"%{query}%") | Destination.state.ilike(f"%{query}%"))
+        q = q.filter(Destination.name.ilike(f"%{query}%") | Destination.state.ilike(f"%{query}%") | Destination.country.ilike(f"%{query}%"))
     if category and category != "All":
         q = q.filter(Destination.category.ilike(f"%{category}%"))
     if state:
