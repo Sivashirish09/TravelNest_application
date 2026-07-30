@@ -1,0 +1,117 @@
+from pydantic import BaseModel, EmailStr
+from typing import Optional, List
+from datetime import datetime
+
+# --- Auth ---
+class UserRegisterRequest(BaseModel):
+    name: str
+    email: EmailStr
+    password: str
+    phone: Optional[str] = None
+
+class UserLoginRequest(BaseModel):
+    email: EmailStr
+    password: str
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    user_id: str
+    name: str
+    email: str
+
+class UserProfileResponse(BaseModel):
+    id: str
+    name: str
+    email: str
+    phone: Optional[str] = None
+    avatar_url: Optional[str] = None
+    preferred_budget: int
+    travel_style: str
+
+# --- Destinations ---
+class DestinationResponse(BaseModel):
+    id: str
+    name: str
+    state: str
+    description: str
+    image_url: str
+    best_season: str
+    weather_info: str
+    estimated_budget_inr: int
+    recommended_days: int
+    rating: float
+    review_count: int
+    category: str
+    latitude: float
+    longitude: float
+
+    class Config:
+        from_attributes = True
+
+# --- Hotel & Resort ---
+class HotelResponse(BaseModel):
+    id: str
+    destination_id: str
+    name: str
+    image_url: str
+    rating: float
+    price_per_night_inr: int
+    category: str
+    amenities: str
+    distance_km: float
+
+    class Config:
+        from_attributes = True
+
+# --- Bookings ---
+class CreateBookingRequest(BaseModel):
+    destination_name: str
+    hotel_or_resort_name: str
+    type: str # Hotel or Resort
+    check_in_date: str
+    check_out_date: str
+    number_of_nights: int
+    number_of_guests: int
+    total_amount_inr: int
+    payment_method: str = "UPI (Google Pay)"
+    image_url: str
+
+class BookingResponse(BaseModel):
+    id: str
+    user_id: str
+    destination_name: str
+    hotel_or_resort_name: str
+    type: str
+    booking_reference: str
+    invoice_number: str
+    check_in_date: str
+    check_out_date: str
+    number_of_nights: int
+    number_of_guests: int
+    total_amount_inr: int
+    payment_method: str
+    payment_status: str
+    status: str
+    qr_code_url: str
+    image_url: str
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+# --- AI Plan ---
+class AIPlanRequest(BaseModel):
+    destination: str
+    days: int
+    budget_inr: int
+    travel_style: str = "Moderate"
+    members: int = 2
+
+class AIPlanResponse(BaseModel):
+    id: str
+    destination: str
+    days: int
+    budget_inr: int
+    travel_style: str
+    itinerary_json: str

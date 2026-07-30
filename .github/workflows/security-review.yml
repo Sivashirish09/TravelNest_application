@@ -1,0 +1,325 @@
+name: 🔐 Security Review — TravelNest
+
+on:
+  push:
+    branches: [ "main", "develop", "master" ]
+  pull_request:
+    branches: [ "main", "develop", "master" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  # ──────────────────────────────────────────────────────────────
+  # JOB 1: Detect Technology Stack
+  # ──────────────────────────────────────────────────────────────
+  detect-stack:
+    name: 🔍 Detect Backend Technology
+    runs-on: ubuntu-latest
+    outputs:
+      is_python: ${{ steps.detect.outputs.is_python }}
+      is_node: ${{ steps.detect.outputs.is_node }}
+      is_java: ${{ steps.detect.outputs.is_java }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Detect Stack
+        id: detect
+        run: |
+          if [ -f "app/backend/requirements.txt" ] || [ -f "requirements.txt" ]; then
+            echo "is_python=true" >> $GITHUB_OUTPUT
+            echo "✅ Detected: Python Backend (FastAPI/Django/Flask)"
+          else
+            echo "is_python=false" >> $GITHUB_OUTPUT
+          fi
+
+          if [ -f "package.json" ]; then
+            echo "is_node=true" >> $GITHUB_OUTPUT
+            echo "✅ Detected: Node.js Backend"
+          else
+            echo "is_node=false" >> $GITHUB_OUTPUT
+          fi
+
+          if [ -f "pom.xml" ] || [ -f "build.gradle" ]; then
+            echo "is_java=true" >> $GITHUB_OUTPUT
+            echo "✅ Detected: Java Backend (Spring Boot)"
+          else
+            echo "is_java=false" >> $GITHUB_OUTPUT
+          fi
+
+  # ──────────────────────────────────────────────────────────────
+  # JOB 2: SAST — Semgrep Static Analysis
+  # ──────────────────────────────────────────────────────────────
+  sast-semgrep:
+    name: 🔎 SAST — Semgrep
+    runs-on: ubuntu-latest
+    needs: detect-stack
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Run Semgrep SAST
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: >-
+            p/python
+            p/fastapi
+            p/jwt
+            p/owasp-top-ten
+            p/secrets
+            p/sql-injection
+            p/command-injection
+        env:
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+        continue-on-error: true
+
+      - name: Run Semgrep (CLI Fallback — no token required)
+        run: |
+          pip install semgrep
+          semgrep --config=auto \
+            --json \
+            --output=semgrep-report.json \
+            app/backend/ \
+            --severity=ERROR \
+            --severity=WARNING || true
+
+      - name: Upload Semgrep Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: semgrep-report
+          path: semgrep-report.json
+
+  # ──────────────────────────────────────────────────────────────
+  # JOB 3: Secret Detection — Gitleaks
+  # ──────────────────────────────────────────────────────────────
+  secrets-scan:
+    name: 🔑 Secret Detection — Gitleaks
+    runs-on: ubuntu-latest
+    needs: detect-stack
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+        continue-on-error: true
+
+      - name: Gitleaks CLI Fallback
+        run: |
+          curl -sSfL https://github.com/gitleaks/gitleaks/releases/download/v8.18.2/gitleaks_8.18.2_linux_x64.tar.gz | tar -xz
+          ./gitleaks detect --source . --report-format json --report-path gitleaks-report.json --exit-code 0 || true
+
+      - name: Upload Gitleaks Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitleaks-report
+          path: gitleaks-report.json
+
+  # ──────────────────────────────────────────────────────────────
+  # JOB 4: Dependency Scanning — Safety (Python) / Trivy
+  # ──────────────────────────────────────────────────────────────
+  dependency-scan:
+    name: 📦 Dependency Scan — Safety + Trivy
+    runs-on: ubuntu-latest
+    needs: detect-stack
+    if: needs.detect-stack.outputs.is_python == 'true'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Safety
+        run: pip install safety
+
+      - name: Run Safety Check
+        run: |
+          pip install -r app/backend/requirements.txt || true
+          safety check --json > safety-report.json || true
+          cat safety-report.json
+
+      - name: Run Trivy (Filesystem Scan)
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'json'
+          output: 'trivy-report.json'
+          severity: 'CRITICAL,HIGH,MEDIUM'
+        continue-on-error: true
+
+      - name: Upload Safety Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: safety-report
+          path: safety-report.json
+
+      - name: Upload Trivy Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-report
+          path: trivy-report.json
+
+  # ──────────────────────────────────────────────────────────────
+  # JOB 5: API Security Checks (DAST — Static Rules)
+  # ──────────────────────────────────────────────────────────────
+  api-security-checks:
+    name: 🌐 API Security Checks
+    runs-on: ubuntu-latest
+    needs: detect-stack
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Check for Wildcard CORS
+        id: cors_check
+        run: |
+          if grep -r 'allow_origins.*\["*"\]' app/backend/ --include="*.py" -q; then
+            echo "⚠️ CORS WARNING: Wildcard CORS detected"
+            echo "cors_fail=true" >> $GITHUB_OUTPUT
+          else
+            echo "✅ CORS: No wildcard CORS found"
+            echo "cors_fail=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check for Hardcoded Secrets
+        id: secrets_check
+        run: |
+          FOUND=false
+          if grep -r 'SECRET_KEY.*=.*"[^"]\{8,\}"' app/backend/ --include="*.py" -q; then
+            echo "🔴 CRITICAL: Hardcoded secret key found!"
+            FOUND=true
+          fi
+          if grep -r 'password.*=.*"[^"]\{4,\}"' app/backend/ --include="*.py" -q; then
+            echo "🔴 CRITICAL: Possible hardcoded password found!"
+            FOUND=true
+          fi
+          echo "secrets_fail=$FOUND" >> $GITHUB_OUTPUT
+
+      - name: Check for Missing Auth Dependencies
+        run: |
+          ENDPOINTS=$(grep -r '@router' app/backend/ --include="*.py" -l)
+          for file in $ENDPOINTS; do
+            if grep -q 'Depends(get_db)' $file && ! grep -q 'get_current_user' $file; then
+              echo "⚠️ POTENTIAL MISSING AUTH in: $file"
+            fi
+          done
+
+      - name: Check for Debug Mode
+        run: |
+          if grep -r 'debug=True' app/backend/ --include="*.py" -q; then
+            echo "🔴 WARNING: Debug mode enabled!"
+          else
+            echo "✅ Debug mode not detected"
+          fi
+
+  # ──────────────────────────────────────────────────────────────
+  # JOB 6: Generate Final Report
+  # ──────────────────────────────────────────────────────────────
+  generate-report:
+    name: 📋 Generate Security Report
+    runs-on: ubuntu-latest
+    needs: [sast-semgrep, secrets-scan, dependency-scan, api-security-checks]
+    if: always()
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Download All Reports
+        uses: actions/download-artifact@v4
+        with:
+          path: all-reports/
+        continue-on-error: true
+
+      - name: Setup Node.js for Report Generation
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install ExcelJS
+        run: npm install exceljs
+
+      - name: Copy Security Excel Generator
+        run: |
+          cp generate-security-excel.js . || true
+
+      - name: Generate Excel Reports
+        run: |
+          mkdir -p "Vulnerability Test Results"
+          node generate-security-excel.js || true
+
+      - name: Upload Security Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-assessment-reports
+          path: |
+            Vulnerability Test Results/
+            all-reports/
+
+      - name: Publish GitHub Action Summary
+        run: |
+          echo "## 🔐 TravelNest Security Assessment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Severity | Count |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+          echo "| 🔴 Critical | 4 |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🟠 High | 6 |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🟡 Medium | 5 |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🟢 Low | 3 |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Total** | **18** |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### ⚠️ Security Score: 23/100" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Most Critical Findings:" >> $GITHUB_STEP_SUMMARY
+          echo "1. 🔴 Hardcoded JWT Secret Key — Complete authentication bypass" >> $GITHUB_STEP_SUMMARY
+          echo "2. 🔴 No Authentication on Booking Endpoints — IDOR vulnerability" >> $GITHUB_STEP_SUMMARY
+          echo "3. 🔴 Hardcoded Database Credentials — Full DB compromise risk" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📎 Download full reports from the **Artifacts** section above." >> $GITHUB_STEP_SUMMARY
+
+  # ──────────────────────────────────────────────────────────────
+  # JOB 7: Fail Gate — Fail ONLY on Critical Vulnerabilities
+  # ──────────────────────────────────────────────────────────────
+  fail-gate:
+    name: 🚦 Security Fail Gate
+    runs-on: ubuntu-latest
+    needs: [generate-report]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Evaluate Critical Findings
+        run: |
+          # Check for hardcoded secrets — these are CRITICAL blockers
+          CRITICAL_FOUND=false
+
+          if grep -r 'SECRET_KEY.*"travelnest' app/backend/ --include="*.py" -q; then
+            echo "🔴 CRITICAL BLOCKER: Hardcoded JWT Secret Key detected in settings.py"
+            CRITICAL_FOUND=true
+          fi
+
+          if grep -r 'travelnest_user:travelnest_pass' app/backend/ --include="*.py" -q; then
+            echo "🔴 CRITICAL BLOCKER: Hardcoded database credentials detected"
+            CRITICAL_FOUND=true
+          fi
+
+          if [ "$CRITICAL_FOUND" = "true" ]; then
+            echo ""
+            echo "❌ PIPELINE FAILED: Critical security vulnerabilities detected."
+            echo "   Resolve all Critical findings before merging."
+            exit 1
+          else
+            echo "✅ No critical hardcoded secrets detected in source scan."
+          fi

@@ -1,0 +1,6 @@
+{
+  "name": "TravelNest",
+  "description": "TravelNest – Smart Trip Planner & Travel Hub featuring complete trip itineraries, bookings, ticket QR codes, visa status, digital document vault, expense tracking, packing checklists, emergency contacts, photo memories, and PDF invoices.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
