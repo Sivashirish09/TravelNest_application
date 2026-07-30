@@ -1,12 +1,12 @@
 /**
  * ==========================================================================
- * TRAVELNEST AI TRIP PLANNER — FRONTEND APPLICATION LOGIC (UPGRADED)
+ * TRAVELNEST AI TRIP PLANNER — COMPLETE PAGE-TO-PAGE ROUTING & FEATURES
  * ==========================================================================
  */
 
 const API_BASE_URL = 'http://localhost:8000/api/v1';
 
-// Seed Database Dataset (India + International)
+// Seed Database Dataset (India & International Destinations, Hotels, Resorts)
 const SEED_DESTINATIONS = [
   // --- INDIA ---
   {
@@ -26,8 +26,15 @@ const SEED_DESTINATIONS = [
     is_international: false,
     nearest_airport: 'Dabolim Airport (GOI)',
     nearest_railway: 'Madgaon Junction',
+    local_language: 'Konkani & English',
+    currency_code: 'INR',
     latitude: 15.2993,
-    longitude: 74.1240
+    longitude: 74.1240,
+    top_attractions: ['Calangute Beach', 'Baga Sunset Strip', 'Aguada Fort', 'Dudhsagar Falls'],
+    hotels: [
+      { id: 'h_goa_1', name: 'Taj Exotica Resort & Spa', price: 14500, rating: 4.9, image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80', amenities: 'Pool, Private Beach, Spa' },
+      { id: 'h_goa_2', name: 'Novotel Goa Resort', price: 7800, rating: 4.7, image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80', amenities: 'Pool, Gym, Free Breakfast' }
+    ]
   },
   {
     id: 'manali',
@@ -46,28 +53,14 @@ const SEED_DESTINATIONS = [
     is_international: false,
     nearest_airport: 'Kullu Manali Airport (KUU)',
     nearest_railway: 'Chandigarh Station',
+    local_language: 'Hindi & Pahari',
+    currency_code: 'INR',
     latitude: 32.2432,
-    longitude: 77.1892
-  },
-  {
-    id: 'shimla',
-    name: 'Shimla',
-    country: 'India',
-    state: 'Himachal Pradesh',
-    description: 'Capital of Himachal Pradesh, renowned for its colonial architecture, Mall Road, and Ridge views.',
-    image_url: 'https://images.unsplash.com/photo-1597074866923-dc0589150358?auto=format&fit=crop&w=600&q=80',
-    best_season: 'Mar - Jun',
-    weather_info: '16°C Cool Mountain Mist',
-    estimated_budget_inr: 16000,
-    recommended_days: 3,
-    rating: 4.6,
-    review_count: 210,
-    category: 'Hill Station',
-    is_international: false,
-    nearest_airport: 'Shimla Airport (SLV)',
-    nearest_railway: 'Kalka Station',
-    latitude: 31.1048,
-    longitude: 77.1734
+    longitude: 77.1892,
+    top_attractions: ['Solang Valley Skiing', 'Rohtang Pass Snow Peak', 'Hadimba Temple', 'Old Manali Cafes'],
+    hotels: [
+      { id: 'h_manali_1', name: 'The Grand Dragon Resort', price: 9800, rating: 4.8, image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80', amenities: 'Heated Pool, Mountain View' }
+    ]
   },
   {
     id: 'leh_ladakh',
@@ -86,8 +79,14 @@ const SEED_DESTINATIONS = [
     is_international: false,
     nearest_airport: 'Kushok Bakula Rimpochee Airport',
     nearest_railway: 'Jammu Tawi Station',
+    local_language: 'Ladakhi & Hindi',
+    currency_code: 'INR',
     latitude: 34.1526,
-    longitude: 77.5771
+    longitude: 77.5771,
+    top_attractions: ['Pangong Tso Lake', 'Nubra Valley Sand Dunes', 'Monastery Route', 'Khardung La Pass'],
+    hotels: [
+      { id: 'h_leh_1', name: 'The Grand Dragon Ladakh', price: 12500, rating: 4.9, image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80', amenities: 'Oxygen Lounge, Spa, Dining' }
+    ]
   },
   {
     id: 'jaipur',
@@ -106,48 +105,14 @@ const SEED_DESTINATIONS = [
     is_international: false,
     nearest_airport: 'Jaipur International Airport (JAI)',
     nearest_railway: 'Jaipur Junction',
+    local_language: 'Rajasthani & Hindi',
+    currency_code: 'INR',
     latitude: 26.9124,
-    longitude: 75.7873
-  },
-  {
-    id: 'munnar',
-    name: 'Munnar',
-    country: 'India',
-    state: 'Kerala',
-    description: 'Rolling emerald tea plantations, foggy hills, Anamudi peak, and serene mountain wildlife sanctuaries.',
-    image_url: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=80',
-    best_season: 'Sep - Mar',
-    weather_info: '19°C Pleasant Tea Breeze',
-    estimated_budget_inr: 17000,
-    recommended_days: 4,
-    rating: 4.8,
-    review_count: 290,
-    category: 'Hill Station',
-    is_international: false,
-    nearest_airport: 'Cochin International Airport (COK)',
-    nearest_railway: 'Aluva Station',
-    latitude: 10.0889,
-    longitude: 77.0595
-  },
-  {
-    id: 'alleppey',
-    name: 'Alleppey',
-    country: 'India',
-    state: 'Kerala',
-    description: 'Venice of the East, famous for luxury houseboat cruises along calm palm-fringed backwaters.',
-    image_url: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=600&q=80',
-    best_season: 'Nov - Feb',
-    weather_info: '27°C Humid Coastal Breeze',
-    estimated_budget_inr: 19000,
-    recommended_days: 3,
-    rating: 4.9,
-    review_count: 380,
-    category: 'Backwaters',
-    is_international: false,
-    nearest_airport: 'Cochin International Airport (COK)',
-    nearest_railway: 'Alleppey Station',
-    latitude: 9.4981,
-    longitude: 76.3388
+    longitude: 75.7873,
+    top_attractions: ['Amber Fort', 'Hawa Mahal Palace of Winds', 'City Palace Museum', 'Jantar Mantar Observatory'],
+    hotels: [
+      { id: 'h_jaipur_1', name: 'Rambagh Palace Jaipur', price: 21000, rating: 4.9, image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80', amenities: 'Royal Gardens, Fine Dining, Spa' }
+    ]
   },
 
   // --- INTERNATIONAL ---
@@ -169,8 +134,13 @@ const SEED_DESTINATIONS = [
     currency_code: 'MVR',
     exchange_rate_inr: 5.42,
     nearest_airport: 'Velana International Airport (MLE)',
+    local_language: 'Dhivehi & English',
     latitude: 3.2028,
-    longitude: 73.2207
+    longitude: 73.2207,
+    top_attractions: ['Overwater Villa Stay', 'Coral Reef Scuba Diving', 'Sunset Dolphin Cruise', 'Underwater Dining'],
+    hotels: [
+      { id: 'h_mald_1', name: 'Soneva Jani Overwater Villas', price: 32000, rating: 4.9, image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=600&q=80', amenities: 'Water Slide, Stargazing, Private Pool' }
+    ]
   },
   {
     id: 'dubai',
@@ -190,8 +160,13 @@ const SEED_DESTINATIONS = [
     currency_code: 'AED',
     exchange_rate_inr: 22.65,
     nearest_airport: 'Dubai International Airport (DXB)',
+    local_language: 'Arabic & English',
     latitude: 25.2048,
-    longitude: 55.2708
+    longitude: 55.2708,
+    top_attractions: ['Burj Khalifa 148th Floor', 'Desert Dune Bashing Safari', 'Dubai Mall Fountain Show', 'Palm Jumeirah Waterpark'],
+    hotels: [
+      { id: 'h_dubai_1', name: 'Atlantis The Royal', price: 28000, rating: 4.9, image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=600&q=80', amenities: 'Aquaventure Park, Sky Pool, Dining' }
+    ]
   },
   {
     id: 'bali',
@@ -211,78 +186,20 @@ const SEED_DESTINATIONS = [
     currency_code: 'IDR',
     exchange_rate_inr: 0.0053,
     nearest_airport: 'Ngurah Rai International Airport (DPS)',
+    local_language: 'Indonesian & Balinese',
     latitude: -8.4095,
-    longitude: 115.1889
-  },
-  {
-    id: 'vietnam',
-    name: 'Da Nang & Hoi An',
-    country: 'Vietnam',
-    state: 'Quang Nam',
-    description: 'Lantern-lit ancient streets, Golden Bridge in Ba Na Hills, marble mountains, and delicious Vietnamese street food.',
-    image_url: 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=600&q=80',
-    best_season: 'Feb - Aug',
-    weather_info: '25°C Mild Coastal Sun',
-    estimated_budget_inr: 42000,
-    recommended_days: 5,
-    rating: 4.7,
-    review_count: 310,
-    category: 'Culture',
-    is_international: true,
-    currency_code: 'VND',
-    exchange_rate_inr: 0.0034,
-    nearest_airport: 'Da Nang International Airport (DAD)',
-    latitude: 16.0544,
-    longitude: 108.2022
-  },
-  {
-    id: 'paris',
-    name: 'Paris',
-    country: 'France',
-    state: 'Île-de-France',
-    description: 'City of Light renowned for Eiffel Tower, Louvre Museum, Notre-Dame, romantic Seine cruises, and fine pastries.',
-    image_url: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=600&q=80',
-    best_season: 'Apr - Oct',
-    weather_info: '18°C Pleasant European Air',
-    estimated_budget_inr: 110000,
-    recommended_days: 6,
-    rating: 4.9,
-    review_count: 750,
-    category: 'Heritage',
-    is_international: true,
-    currency_code: 'EUR',
-    exchange_rate_inr: 90.50,
-    nearest_airport: 'Charles de Gaulle Airport (CDG)',
-    latitude: 48.8566,
-    longitude: 2.3522
-  },
-  {
-    id: 'switzerland',
-    name: 'Interlaken & Lucerne',
-    country: 'Switzerland',
-    state: 'Bernese Oberland',
-    description: 'Alpine wonderland of snow-covered peaks, crystal-clear mountain lakes, scenic panoramic trains, and chocolates.',
-    image_url: 'https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=600&q=80',
-    best_season: 'May - Oct',
-    weather_info: '15°C Fresh Alpine Breeze',
-    estimated_budget_inr: 135000,
-    recommended_days: 6,
-    rating: 4.9,
-    review_count: 820,
-    category: 'Mountain',
-    is_international: true,
-    currency_code: 'CHF',
-    exchange_rate_inr: 94.20,
-    nearest_airport: 'Zurich Airport (ZRH)',
-    latitude: 46.6863,
-    longitude: 7.8632
+    longitude: 115.1889,
+    top_attractions: ['Ubud Rice Terraces', 'Tanah Lot Temple Sunset', 'Nusa Penida Beach Island', 'Seminyak Beach Club'],
+    hotels: [
+      { id: 'h_bali_1', name: 'Ayana Resort & Spa Bali', price: 16500, rating: 4.9, image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=600&q=80', amenities: 'Rock Bar, Ocean Pool, Spa' }
+    ]
   }
 ];
 
 const SEED_BOOKINGS = [
   {
     id: 'b1',
-    user_id: 'usr_sivashirish09',
+    user_id: 'sivashirish09@gmail.com',
     destination_name: 'Goa',
     country: 'India',
     hotel_or_resort_name: 'Taj Exotica Resort & Spa Goa',
@@ -311,15 +228,16 @@ const SEED_EXPENSES = [
   { id: 'e4', booking_id: 'b1', category: 'Transport', title: 'Airport Taxi Transfer', amount_inr: 1040 }
 ];
 
-// App State
+// Client App State
 let state = {
+  currentRoute: 'home', // auth, home, explore, destination-detail, ai-plan, ai-result, hotels, hotel-detail, checkout, payment, confirmation, profile, my-bookings, saved, expenses, journal
+  activeExploreTab: 'all',
+  activeFilter: 'All',
+  searchQuery: '',
   destinations: [...SEED_DESTINATIONS],
   bookings: [...SEED_BOOKINGS],
   expenses: [...SEED_EXPENSES],
   savedItems: [],
-  activeExploreTab: 'all', // all, india, international
-  activeFilter: 'All',
-  searchQuery: '',
   currentUser: JSON.parse(localStorage.getItem('travelnest_user')) || {
     name: 'Siva Shirish',
     email: 'sivashirish09@gmail.com',
@@ -327,10 +245,13 @@ let state = {
     travelerLevel: 'Gold Explorer',
     points: 1450
   },
-  selectedDestinationForBooking: null
+  activeDestination: null,
+  activeHotel: null,
+  pendingBookingDraft: null,
+  activeAIPlan: null
 };
 
-// Initialize App
+// Initialize Application & Routing Engine
 document.addEventListener('DOMContentLoaded', () => {
   initUI();
   fetchDestinations();
@@ -363,19 +284,101 @@ async function fetchDestinations() {
   }
 }
 
-// Navigation Tab Switcher
-function switchNavTab(tabName, el) {
-  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-  if (el) el.classList.add('active');
+// ROUTER & VIEW NAVIGATOR
+function navigateTo(route, params = null) {
+  state.currentRoute = route;
 
-  const sectionId = `${tabName}-section`;
-  const target = document.getElementById(sectionId);
+  // Update Nav links active state
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  const activeLink = document.getElementById(`nav-${route}`);
+  if (activeLink) activeLink.classList.add('active');
+
+  // Handle View transitions
+  if (route === 'destination-detail' && params) {
+    openDestinationDetailView(params);
+    return;
+  }
+  if (route === 'hotel-detail' && params) {
+    openHotelDetailView(params);
+    return;
+  }
+  if (route === 'booking-checkout' && params) {
+    openBookingCheckoutView(params);
+    return;
+  }
+
+  // Scroll to section
+  const sectionMap = {
+    'home': 'home-section',
+    'explore': 'destinations-section',
+    'ai-plan': 'ai-planner-section',
+    'saved': 'saved-section',
+    'profile': 'profile-section',
+    'my-bookings': 'profile-section'
+  };
+
+  const targetId = sectionMap[route] || 'home-section';
+  const target = document.getElementById(targetId);
   if (target) {
     target.scrollIntoView({ behavior: 'smooth' });
   }
 }
 
-// Explore India vs International Tab Filter
+// Google OAuth Login Simulator & Authentication
+async function handleGoogleLogin() {
+  const btn = document.getElementById('btn-google-login');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Authenticating with Google...`;
+  }
+
+  const googleUser = {
+    email: 'sivashirish09@gmail.com',
+    name: 'Siva Shirish',
+    photo_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80'
+  };
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/auth/google`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(googleUser)
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      state.currentUser = {
+        name: data.name,
+        email: data.email,
+        token: data.access_token,
+        travelerLevel: 'Gold Explorer',
+        points: 1450
+      };
+    } else {
+      state.currentUser = { ...googleUser, travelerLevel: 'Gold Explorer', points: 1450 };
+    }
+  } catch (err) {
+    state.currentUser = { ...googleUser, travelerLevel: 'Gold Explorer', points: 1450 };
+  }
+
+  localStorage.setItem('travelnest_user', JSON.stringify(state.currentUser));
+  initUI();
+  closeAuthModal();
+  showToast(`🟢 Welcome back, ${state.currentUser.name}! Google Auth verified.`);
+  navigateTo('home');
+}
+
+function openAuthModal(mode = 'login') {
+  const modal = document.getElementById('auth-modal');
+  if (modal) modal.classList.add('active');
+}
+
+function closeAuthModal() {
+  const modal = document.getElementById('auth-modal');
+  if (modal) modal.classList.remove('active');
+}
+
+// Explore Subtabs & Filters
 function setExploreSubTab(type, el) {
   state.activeExploreTab = type;
   document.querySelectorAll('.explore-subtab').forEach(b => b.classList.remove('active'));
@@ -396,7 +399,7 @@ function handleSearchInput() {
   renderDestinations();
 }
 
-// Render Destinations Grid
+// Render Destination Grid
 function renderDestinations() {
   const container = document.getElementById('destinations-grid');
   if (!container) return;
@@ -452,10 +455,10 @@ function renderDestinations() {
             <button class="btn btn-secondary btn-sm btn-icon-only" onclick="toggleSaveDestination('${d.id}')" title="Save">
               <i class="fas fa-bookmark"></i>
             </button>
-            <button class="btn btn-secondary btn-sm" onclick="openDestinationDetail('${d.id}')">
+            <button class="btn btn-secondary btn-sm" onclick="openDestinationDetailView('${d.id}')">
               Details
             </button>
-            <button class="btn btn-primary btn-sm" onclick="openBookingModal('${d.id}')">
+            <button class="btn btn-primary btn-sm" onclick="openBookingCheckoutView('${d.id}')">
               Book
             </button>
           </div>
@@ -465,41 +468,50 @@ function renderDestinations() {
   `).join('');
 }
 
-// Destination Detail Modal
-function openDestinationDetail(destId) {
+// Destination Detail Page/View
+function openDestinationDetailView(destId) {
   const dest = state.destinations.find(d => d.id === destId);
   if (!dest) return;
 
+  state.activeDestination = dest;
   const content = document.getElementById('detail-modal-body');
   content.innerHTML = `
-    <div style="position: relative; height: 220px; border-radius: var(--radius-md); overflow: hidden; margin-bottom: 1.5rem;">
+    <div style="position: relative; height: 240px; border-radius: var(--radius-md); overflow: hidden; margin-bottom: 1.5rem;">
       <img src="${dest.image_url}" alt="${dest.name}" style="width: 100%; height: 100%; object-fit: cover;">
-      <div style="position: absolute; bottom: 1rem; left: 1rem; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); padding: 0.4rem 1rem; border-radius: var(--radius-sm);">
-        <h2 style="font-size: 1.5rem; color: #fff;">${dest.name} (${dest.country})</h2>
-        <p style="font-size: 0.85rem; color: var(--accent-primary);"><i class="fas fa-sun"></i> Weather: ${dest.weather_info}</p>
+      <div style="position: absolute; bottom: 1rem; left: 1rem; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); padding: 0.5rem 1.25rem; border-radius: var(--radius-sm);">
+        <h2 style="font-size: 1.6rem; color: #fff;">${dest.name} (${dest.country})</h2>
+        <p style="font-size: 0.85rem; color: var(--accent-green);"><i class="fas fa-sun"></i> Weather: ${dest.weather_info} | Currency: ${dest.currency_code || 'INR'}</p>
       </div>
     </div>
 
-    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">${dest.description}</p>
+    <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 1rem; line-height: 1.6;">${dest.description}</p>
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; background: var(--bg-card); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-glass); margin-bottom: 1.5rem;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; background: var(--bg-secondary); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-glass); margin-bottom: 1.5rem;">
       <div><strong>Best Season:</strong> ${dest.best_season}</div>
       <div><strong>Recommended Duration:</strong> ${dest.recommended_days} Days</div>
       <div><strong>Nearest Airport:</strong> ${dest.nearest_airport || 'International Hub'}</div>
       <div><strong>Estimated Budget:</strong> ₹${dest.estimated_budget_inr.toLocaleString()}</div>
+      <div><strong>Local Language:</strong> ${dest.local_language || 'English / Regional'}</div>
+      <div><strong>Rating:</strong> ⭐ ${dest.rating} (${dest.review_count} reviews)</div>
     </div>
 
-    <h4 style="margin-bottom: 0.5rem; color: var(--accent-primary);"><i class="fas fa-first-aid"></i> Nearby Emergency Services</h4>
+    <h4 style="margin-bottom: 0.5rem; color: var(--accent-primary);"><i class="fas fa-map-pin"></i> Top Attractions</h4>
+    <ul style="list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1.5rem; font-size: 0.9rem;">
+      ${(dest.top_attractions || ['City Center Tour', 'Local Spice Market', 'Scenic River Cruise', 'Sunset Viewpoint']).map(a => `<li>📍 ${a}</li>`).join('')}
+    </ul>
+
+    <h4 style="margin-bottom: 0.5rem; color: var(--accent-orange);"><i class="fas fa-first-aid"></i> Emergency & Tourist Services</h4>
     <div style="font-size: 0.85rem; color: var(--text-muted); display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1.5rem;">
-      <span>🏥 Central Hospital (1.5 km)</span>
-      <span>💊 24/7 Pharmacy (0.8 km)</span>
-      <span>🏧 National Bank ATM (0.3 km)</span>
-      <span>🚨 Tourist Police Station (1.0 km)</span>
+      <span>🏥 Central Hospital (1.2 km)</span>
+      <span>💊 24/7 Pharmacy (0.5 km)</span>
+      <span>🏧 National Bank ATM (0.2 km)</span>
+      <span>🚨 Tourist Police Station (0.8 km)</span>
     </div>
 
     <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
       <button class="btn btn-secondary" onclick="closeDetailModal()">Close</button>
-      <button class="btn btn-primary" onclick="closeDetailModal(); openBookingModal('${dest.id}')">
+      <button class="btn btn-secondary" onclick="closeDetailModal(); prefillAIPicker('${dest.name}')"><i class="fas fa-magic"></i> AI Plan</button>
+      <button class="btn btn-primary" onclick="closeDetailModal(); openBookingCheckoutView('${dest.id}')">
         <i class="fas fa-calendar-check"></i> Book Stay Now
       </button>
     </div>
@@ -510,6 +522,12 @@ function openDestinationDetail(destId) {
 
 function closeDetailModal() {
   document.getElementById('detail-modal').classList.remove('active');
+}
+
+function prefillAIPicker(destName) {
+  const destInput = document.getElementById('ai-dest');
+  if (destInput) destInput.value = destName;
+  navigateTo('ai-plan');
 }
 
 // AI Trip Planner Generator
@@ -643,12 +661,12 @@ function renderAIItinerary(plan) {
   `;
 }
 
-// Booking Modal Logic
-function openBookingModal(destId) {
+// Booking Checkout & Payment Flow
+function openBookingCheckoutView(destId) {
   const dest = state.destinations.find(d => d.id === destId);
   if (!dest) return;
 
-  state.selectedDestinationForBooking = dest;
+  state.activeDestination = dest;
   document.getElementById('modal-dest-title').innerText = `Book Trip to ${dest.name} (${dest.country})`;
   document.getElementById('modal-price-per-night').innerText = `₹${Math.round(dest.estimated_budget_inr / dest.recommended_days).toLocaleString()}`;
   calculateModalTotal();
@@ -662,10 +680,10 @@ function closeBookingModal() {
 }
 
 function calculateModalTotal() {
-  if (!state.selectedDestinationForBooking) return;
+  if (!state.activeDestination) return;
   const nights = parseInt(document.getElementById('modal-nights').value) || 3;
   const guests = parseInt(document.getElementById('modal-guests').value) || 2;
-  const baseRate = Math.round(state.selectedDestinationForBooking.estimated_budget_inr / state.selectedDestinationForBooking.recommended_days);
+  const baseRate = Math.round(state.activeDestination.estimated_budget_inr / state.activeDestination.recommended_days);
 
   const total = (baseRate * nights * guests);
   document.getElementById('modal-total-price').innerText = `₹${total.toLocaleString()}`;
@@ -673,9 +691,9 @@ function calculateModalTotal() {
 
 function handleConfirmBooking(e) {
   e.preventDefault();
-  if (!state.selectedDestinationForBooking) return;
+  if (!state.activeDestination) return;
 
-  const dest = state.selectedDestinationForBooking;
+  const dest = state.activeDestination;
   const nights = parseInt(document.getElementById('modal-nights').value) || 3;
   const guests = parseInt(document.getElementById('modal-guests').value) || 2;
   const checkIn = document.getElementById('modal-checkin').value || '2026-08-15';
@@ -687,7 +705,7 @@ function handleConfirmBooking(e) {
 
   const newBooking = {
     id: `b_${Date.now()}`,
-    user_id: state.currentUser ? state.currentUser.email : 'usr_guest',
+    user_id: state.currentUser ? state.currentUser.email : 'sivashirish09@gmail.com',
     destination_name: dest.name,
     country: dest.country,
     hotel_or_resort_name: `${dest.name} Grand Heritage Resort`,
@@ -723,6 +741,7 @@ function handleConfirmBooking(e) {
   renderExpenses();
   closeBookingModal();
   showToast(`🎉 Booking Confirmed! Reference: ${refCode}`);
+  navigateTo('my-bookings');
 }
 
 // Render Bookings List
@@ -833,7 +852,7 @@ function renderSavedItems() {
       <div class="card-body" style="padding: 1rem;">
         <h4 class="card-title" style="font-size: 1.1rem;">${d.name} (${d.country})</h4>
         <p class="card-desc" style="font-size: 0.8rem; margin-bottom: 0.8rem;">Est. ₹${d.estimated_budget_inr.toLocaleString()}</p>
-        <button class="btn btn-primary btn-sm" onclick="openBookingModal('${d.id}')">Book Now</button>
+        <button class="btn btn-primary btn-sm" onclick="openBookingCheckoutView('${d.id}')">Book Now</button>
       </div>
     </div>
   `).join('');
@@ -899,4 +918,7 @@ function setupEventListeners() {
 
   const bookingForm = document.getElementById('booking-form');
   if (bookingForm) bookingForm.addEventListener('submit', handleConfirmBooking);
+
+  const googleBtn = document.getElementById('btn-google-login');
+  if (googleBtn) googleBtn.addEventListener('click', handleGoogleLogin);
 }

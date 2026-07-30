@@ -25,7 +25,7 @@
        ========================================================================== -->
   <header class="navbar" id="main-header">
     <div class="container nav-container">
-      <a href="#" class="brand-logo" id="brand-logo-link">
+      <a href="#" class="brand-logo" id="brand-logo-link" onclick="navigateTo('home')">
         <div class="brand-icon">
           <i class="fas fa-compass"></i>
         </div>
@@ -33,18 +33,18 @@
       </a>
 
       <ul class="nav-menu" id="nav-menu">
-        <li><a href="#home-section" class="nav-link active" onclick="switchNavTab('home', this)" id="nav-home"><i class="fas fa-home"></i> Home</a></li>
-        <li><a href="#destinations-section" class="nav-link" onclick="switchNavTab('destinations', this)" id="nav-explore"><i class="fas fa-compass"></i> Explore</a></li>
-        <li><a href="#ai-planner-section" class="nav-link" onclick="switchNavTab('ai-planner', this)" id="nav-ai-plan"><i class="fas fa-sparkles"></i> AI Plan</a></li>
-        <li><a href="#saved-section" class="nav-link" onclick="switchNavTab('saved', this)" id="nav-saved"><i class="fas fa-bookmark"></i> Saved Trips</a></li>
-        <li><a href="#profile-section" class="nav-link" onclick="switchNavTab('profile', this)" id="nav-profile"><i class="fas fa-user-circle"></i> Profile</a></li>
+        <li><a href="#home-section" class="nav-link active" onclick="navigateTo('home', this)" id="nav-home"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="#destinations-section" class="nav-link" onclick="navigateTo('explore', this)" id="nav-explore"><i class="fas fa-compass"></i> Explore</a></li>
+        <li><a href="#ai-planner-section" class="nav-link" onclick="navigateTo('ai-plan', this)" id="nav-ai-plan"><i class="fas fa-sparkles"></i> AI Plan</a></li>
+        <li><a href="#saved-section" class="nav-link" onclick="navigateTo('saved', this)" id="nav-saved"><i class="fas fa-bookmark"></i> Saved Trips</a></li>
+        <li><a href="#profile-section" class="nav-link" onclick="navigateTo('profile', this)" id="nav-profile"><i class="fas fa-user-circle"></i> Profile</a></li>
       </ul>
 
       <div class="nav-actions">
-        <button class="btn btn-secondary btn-sm" id="user-profile-btn" onclick="switchNavTab('profile')">
+        <button class="btn btn-secondary btn-sm" id="user-profile-btn" onclick="openAuthModal()">
           <i class="fas fa-user-circle"></i> Siva Shirish
         </button>
-        <a href="#ai-planner-section" class="btn btn-primary btn-sm" id="btn-header-plan">
+        <a href="#ai-planner-section" class="btn btn-primary btn-sm" id="btn-header-plan" onclick="navigateTo('ai-plan')">
           <i class="fas fa-magic"></i> Plan with AI
         </a>
       </div>
@@ -248,7 +248,7 @@
 
           <div style="display: flex; gap: 0.75rem;">
             <button class="btn btn-secondary btn-sm" onclick="showToast('Profile editing enabled')"><i class="fas fa-edit"></i> Edit Profile</button>
-            <button class="btn btn-secondary btn-sm" onclick="showToast('Logged out')"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            <button class="btn btn-secondary btn-sm" onclick="openAuthModal()"><i class="fas fa-sign-in-alt"></i> Auth Options</button>
           </div>
         </div>
 
@@ -279,7 +279,48 @@
   </main>
 
   <!-- ==========================================================================
-       7. DESTINATION DETAIL MODAL
+       7. GOOGLE LOGIN / AUTHENTICATION MODAL
+       ========================================================================== -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal-container" style="max-width: 440px; text-align: center;">
+      <button class="modal-close" onclick="closeAuthModal()">&times;</button>
+      <div style="margin-bottom: 1.5rem;">
+        <div class="brand-icon" style="margin: 0 auto 0.75rem auto; width: 48px; height: 48px;">
+          <i class="fas fa-compass"></i>
+        </div>
+        <h2 style="font-size: 1.5rem;">Welcome to TravelNest</h2>
+        <p style="font-size: 0.88rem; color: var(--text-secondary);">Sign in to sync saved trips and bookings</p>
+      </div>
+
+      <!-- Google OAuth Button -->
+      <button class="btn btn-secondary" id="btn-google-login" style="width: 100%; padding: 0.8rem; margin-bottom: 1.25rem; font-size: 0.95rem; justify-content: center; box-shadow: var(--shadow-sm);">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style="width: 18px; height: 18px; margin-right: 0.5rem;">
+        Continue with Google
+      </button>
+
+      <div style="display: flex; align-items: center; margin: 1rem 0; color: var(--text-muted); font-size: 0.8rem;">
+        <hr style="flex: 1; border: none; border-top: 1px solid var(--border-glass);">
+        <span style="padding: 0 0.5rem;">OR EMAIL</span>
+        <hr style="flex: 1; border: none; border-top: 1px solid var(--border-glass);">
+      </div>
+
+      <div class="form-group" style="text-align: left;">
+        <label for="auth-email">Email Address</label>
+        <input type="email" id="auth-email" class="form-control" value="sivashirish09@gmail.com">
+      </div>
+      <div class="form-group" style="text-align: left;">
+        <label for="auth-password">Password</label>
+        <input type="password" id="auth-password" class="form-control" value="••••••••">
+      </div>
+
+      <button class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;" onclick="handleGoogleLogin()">
+        Sign In with Email
+      </button>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       8. DESTINATION DETAIL MODAL
        ========================================================================== -->
   <div class="modal-overlay" id="detail-modal">
     <div class="modal-container" style="max-width: 680px;">
@@ -291,7 +332,7 @@
   </div>
 
   <!-- ==========================================================================
-       8. BOOKING CHECKOUT MODAL
+       9. BOOKING CHECKOUT MODAL
        ========================================================================== -->
   <div class="modal-overlay" id="booking-modal">
     <div class="modal-container">

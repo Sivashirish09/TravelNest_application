@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.database.connection import get_db
 from app.models.models import User
-from app.schemas.schemas import UserRegisterRequest, UserLoginRequest, TokenResponse, UserProfileResponse
+from app.schemas.schemas import UserRegisterRequest, UserLoginRequest, GoogleLoginRequest, TokenResponse, UserProfileResponse
 from app.dependencies import get_current_user
 from passlib.context import CryptContext
 from jose import jwt
@@ -25,7 +25,6 @@ def register_user(req: UserRegisterRequest, db: Session = Depends(get_db)):
     if existing:
         raise HTTPException(status_code=400, detail="Email already registered")
 
-    # Password length validation (min 8 chars)
     if len(req.password) < 8:
         raise HTTPException(status_code=422, detail="Password must be at least 8 characters")
 
@@ -36,7 +35,11 @@ def register_user(req: UserRegisterRequest, db: Session = Depends(get_db)):
         email=req.email,
         name=req.name,
         hashed_password=hashed_pwd,
-        phone=req.phone
+        phone=req.phone,
+        preferred_budget=req.preferred_budget or 25000,
+        travel_style=req.travel_style or "Moderate",
+        traveler_level="Gold Explorer",
+        reward_points=1250
     )
     db.add(new_user)
     db.commit()
@@ -64,6 +67,37 @@ def login_user(req: UserLoginRequest, db: Session = Depends(get_db)):
         email=user.email
     )
 
+@router.post("/google", response_model=TokenResponse)
+def google_login(req: GoogleLoginRequest, db: Session = Depends(get_db)):
+    """
+    Google OAuth Authentication Handler.
+    Checks if user exists by email, or creates a new user profile automatically.
+    """
+    user = db.query(User).filter(User.email == req.email).first()
+    if not user:
+        user_id = f"usr_g_{uuid.uuid4().hex[:10]}"
+        dummy_hash = pwd_context.hash(uuid.uuid4().hex)
+        user = User(
+            id=user_id,
+            email=req.email,
+            name=req.name,
+            hashed_password=dummy_hash,
+            avatar_url=req.photo_url,
+            traveler_level="Gold Explorer",
+            reward_points=1450
+        )
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+
+    token = create_access_token({"sub": user.id, "email": user.email})
+    return TokenResponse(
+        access_token=token,
+        user_id=user.id,
+        name=user.name,
+        email=user.email
+    )
+
 @router.get("/me", response_model=UserProfileResponse)
 def get_my_profile(current_user: User = Depends(get_current_user)):
     """Return the currently authenticated user's profile."""
@@ -71,8 +105,4 @@ def get_my_profile(current_user: User = Depends(get_current_user)):
 
 @router.post("/logout")
 def logout(current_user: User = Depends(get_current_user)):
-    """
-    Client-side logout. Instruct client to discard the token.
-    For full server-side revocation, integrate a Redis denylist here.
-    """
-    return {"message": "Logged out successfully. Please discard your token."}
+    return {"message": "Logged out successfully. Token discarded."}

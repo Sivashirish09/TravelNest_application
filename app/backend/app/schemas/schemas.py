@@ -15,6 +15,12 @@ class UserLoginRequest(BaseModel):
     email: EmailStr
     password: str
 
+class GoogleLoginRequest(BaseModel):
+    google_token: Optional[str] = None
+    email: EmailStr
+    name: str
+    photo_url: Optional[str] = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80"
+
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
