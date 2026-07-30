@@ -8,8 +8,13 @@ const TOTAL_TEST_CASES = 300;
 const TEST_URL = 'file://' + path.resolve(__dirname, '../dummy-login.html');
 
 async function runTests() {
+    let options = new chrome.Options();
+    options.addArguments('--headless=new');
+    options.addArguments('--no-sandbox');
+    options.addArguments('--disable-dev-shm-usage');
+
     let driver = await new Builder().forBrowser('chrome')
-        .setChromeOptions(new chrome.Options().addArguments('--headless=new')) // Run headless to make 300 tests fast
+        .setChromeOptions(options)
         .build();
 
     let testResults = [];

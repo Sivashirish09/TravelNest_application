@@ -2,9 +2,9 @@ name: 🔐 Security Review — TravelNest
 
 on:
   push:
-    branches: [ "main", "develop", "master" ]
+    branches: [ "main", "develop", "master", "brpo", "**" ]
   pull_request:
-    branches: [ "main", "develop", "master" ]
+    branches: [ "main", "develop", "master", "brpo", "**" ]
   workflow_dispatch:
 
 permissions:
