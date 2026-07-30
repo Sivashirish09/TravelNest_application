@@ -24,19 +24,32 @@ const wdioOptions = {
 async function startAppiumServer() {
     console.log('Checking Appium server availability...');
     return new Promise((resolve) => {
-        const appium = spawn('npx', ['appium'], { shell: true });
+        let appium = null;
         let started = false;
         
-        appium.stdout.on('data', (data) => {
-            if (data.toString().includes('Appium REST http interface listener started')) {
-                started = true;
-                resolve(appium);
+        try {
+            appium = spawn('npx', ['-y', 'appium'], { shell: true, stdio: ['ignore', 'pipe', 'pipe'] });
+            
+            if (appium.stdout) {
+                appium.stdout.on('data', (data) => {
+                    if (data.toString().includes('Appium REST http interface listener started')) {
+                        started = true;
+                        resolve(appium);
+                    }
+                });
             }
-        });
 
-        setTimeout(() => {
-            if (!started) resolve(null);
-        }, 3000);
+            setTimeout(() => {
+                if (!started) {
+                    if (appium) {
+                        try { appium.kill(); } catch (e) {}
+                    }
+                    resolve(null);
+                }
+            }, 2000);
+        } catch (e) {
+            resolve(null);
+        }
     });
 }
 
@@ -157,6 +170,7 @@ async function runTests() {
     const reportPath = path.resolve(__dirname, 'appium-test-summary.xlsx');
     await workbook.xlsx.writeFile(reportPath);
     console.log(`Excel report generated at: ${reportPath}`);
+    process.exit(0);
 }
 
 runTests().catch(err => {
