@@ -31,6 +31,8 @@ package-lock.json
 !validation-tests/*.xlsx
 !deployment-tests/*.xlsx
 !load-tests/*.xlsx
+!dast-tests/*.xlsx
+!FINAL REPORTS/*
 
 # Python cache
 __pycache__/

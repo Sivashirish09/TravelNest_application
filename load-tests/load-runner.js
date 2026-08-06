@@ -237,21 +237,50 @@ async function runLoadTests() {
         }
     });
 
+    const { generateHtmlReport } = require('../scripts/html-report-generator');
+
     const reportDir = path.resolve(__dirname);
-    const reportPath = path.resolve(reportDir, 'load-test-report.xlsx');
-    const legacyPath = path.resolve(reportDir, 'load-test-results.xlsx');
-    await workbook.xlsx.writeFile(reportPath);
+    const primaryXlsx = path.resolve(reportDir, 'Load_Test_Report.xlsx');
+    const primaryHtml = path.resolve(reportDir, 'Load_Test_Report.html');
+    const legacyPath = path.resolve(reportDir, 'load-test-report.xlsx');
+
+    await workbook.xlsx.writeFile(primaryXlsx);
     await workbook.xlsx.writeFile(legacyPath);
-    console.log(`📁 Report successfully written to: ${reportPath}`);
+
+    // Generate HTML report
+    const htmlContent = generateHtmlReport({
+        title: 'Performance & Load Testing Execution Report',
+        subtitle: 'Comprehensive 300 Performance Scenarios across Throughput, Latency, Concurrency & Stress Thresholds',
+        suiteName: 'Load & Performance Automation',
+        icon: '📈',
+        total: TOTAL_TEST_CASES,
+        passed: passCount,
+        failed: failCount,
+        duration: totalDurationSec,
+        results: testResults,
+        excelFileName: 'Load_Test_Report.xlsx',
+        categories: CATEGORIES
+    });
+    fs.writeFileSync(primaryHtml, htmlContent, 'utf8');
+
+    console.log(`📁 Reports successfully written:`);
+    console.log(`   - Excel: ${primaryXlsx}`);
+    console.log(`   - HTML:  ${primaryHtml}`);
+
+    // Copy to FINAL REPORTS
+    const finalReportsDir = path.resolve(__dirname, '../FINAL REPORTS');
+    if (!fs.existsSync(finalReportsDir)) fs.mkdirSync(finalReportsDir, { recursive: true });
+    fs.copyFileSync(primaryXlsx, path.resolve(finalReportsDir, 'Load_Test_Report.xlsx'));
+    fs.copyFileSync(primaryHtml, path.resolve(finalReportsDir, 'Load_Test_Report.html'));
 
     const rootReportsDir = path.resolve(__dirname, '../reports');
     if (!fs.existsSync(rootReportsDir)) fs.mkdirSync(rootReportsDir, { recursive: true });
-    fs.copyFileSync(reportPath, path.resolve(rootReportsDir, 'load-test-report.xlsx'));
+    fs.copyFileSync(primaryXlsx, path.resolve(rootReportsDir, 'load-test-report.xlsx'));
 
-    // Also copy to 'Load Test Results' folder if it exists
+    // Also copy to legacy 'Load Test Results' folder
     const legacyDir = path.resolve(__dirname, '../Load Test Results');
     if (!fs.existsSync(legacyDir)) fs.mkdirSync(legacyDir, { recursive: true });
-    fs.copyFileSync(reportPath, path.resolve(legacyDir, 'load-test-results.xlsx'));
+    fs.copyFileSync(primaryXlsx, path.resolve(legacyDir, 'load-test-results.xlsx'));
 
     return { total: TOTAL_TEST_CASES, passed: passCount, failed: failCount, duration: totalDurationSec };
 }

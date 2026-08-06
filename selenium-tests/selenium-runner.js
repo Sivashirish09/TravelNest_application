@@ -264,16 +264,45 @@ async function runSeleniumTests() {
         }
     });
 
+    const { generateHtmlReport } = require('../scripts/html-report-generator');
+
     const reportDir = path.resolve(__dirname);
-    const reportPath = path.resolve(reportDir, 'selenium-web-report.xlsx');
-    const legacyPath = path.resolve(reportDir, 'test-summary.xlsx');
-    await workbook.xlsx.writeFile(reportPath);
+    const primaryXlsx = path.resolve(reportDir, 'Selenium_Test_Report.xlsx');
+    const primaryHtml = path.resolve(reportDir, 'Selenium_Test_Report.html');
+    const legacyPath = path.resolve(reportDir, 'selenium-web-report.xlsx');
+
+    await workbook.xlsx.writeFile(primaryXlsx);
     await workbook.xlsx.writeFile(legacyPath);
-    console.log(`📁 Report successfully written to: ${reportPath}`);
+
+    // Generate HTML report
+    const htmlContent = generateHtmlReport({
+        title: 'Selenium Web End-to-End Test Report',
+        subtitle: 'Comprehensive 300 Test Cases across Auth, Discovery, Booking, AI Planner & Admin',
+        suiteName: 'Selenium Web Automation',
+        icon: '🌐',
+        total: TOTAL_TEST_CASES,
+        passed: passCount,
+        failed: failCount,
+        duration: totalDurationSec,
+        results: testResults,
+        excelFileName: 'Selenium_Test_Report.xlsx',
+        categories: CATEGORIES
+    });
+    fs.writeFileSync(primaryHtml, htmlContent, 'utf8');
+
+    console.log(`📁 Reports successfully written:`);
+    console.log(`   - Excel: ${primaryXlsx}`);
+    console.log(`   - HTML:  ${primaryHtml}`);
+
+    // Copy to FINAL REPORTS
+    const finalReportsDir = path.resolve(__dirname, '../FINAL REPORTS');
+    if (!fs.existsSync(finalReportsDir)) fs.mkdirSync(finalReportsDir, { recursive: true });
+    fs.copyFileSync(primaryXlsx, path.resolve(finalReportsDir, 'Selenium_Test_Report.xlsx'));
+    fs.copyFileSync(primaryHtml, path.resolve(finalReportsDir, 'Selenium_Test_Report.html'));
 
     const rootReportsDir = path.resolve(__dirname, '../reports');
     if (!fs.existsSync(rootReportsDir)) fs.mkdirSync(rootReportsDir, { recursive: true });
-    fs.copyFileSync(reportPath, path.resolve(rootReportsDir, 'selenium-web-report.xlsx'));
+    fs.copyFileSync(primaryXlsx, path.resolve(rootReportsDir, 'selenium-web-report.xlsx'));
 
     return { total: TOTAL_TEST_CASES, passed: passCount, failed: failCount, duration: totalDurationSec };
 }
