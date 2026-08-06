@@ -1,0 +1,13 @@
+{
+  "name": "travelnest-validation-tests",
+  "version": "1.0.0",
+  "description": "TravelNest Schema, Boundary & Security Input Validation Tests Suite (300 Test Cases)",
+  "main": "validation-runner.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "node validation-runner.js"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0"
+  }
+}

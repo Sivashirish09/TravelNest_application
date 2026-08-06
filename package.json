@@ -2,18 +2,49 @@
   "name": "travelnest-ai-trip-planner",
   "version": "1.0.0",
   "description": "TravelNest AI Trip Planner & Hotel Booking Platform",
+  "type": "module",
   "main": "server.js",
   "scripts": {
-    "dev": "node server.js",
-    "start": "node server.js",
-    "serve": "node server.js",
-    "test": "node selenium-tests/tests/login-tests.js && node appium-tests/appium-tests.js && node dast-tests/dast-runner.js && node load-tests/load-runner.js",
-    "test:selenium": "node selenium-tests/tests/login-tests.js",
-    "test:appium": "node appium-tests/appium-tests.js",
+    "build": "vite build",
+    "dev": "vite --host 0.0.0.0 --open",
+    "start": "vite --host 0.0.0.0 --open",
+    "serve": "vite preview --host 0.0.0.0 --open",
+    "serve:node": "node server.js",
+    "android": "vite build && npx cap run android",
+    "andriod": "npm run android",
+    "android:sync": "npx cap sync android",
+    "android:build": "vite build && npx cap sync android",
+    "android:run": "vite build && npx cap run android",
+    "android:install": "cmd /c install-apk.bat",
+    "android:open": "npx cap open android",
+    "test": "node selenium-tests/selenium-runner.js && node appium-tests/appium-runner.js && node unit-tests/unit-runner.js && node validation-tests/validation-runner.js && node deployment-tests/deployment-runner.js && node load-tests/load-runner.js && node reports/compile-master-report.js",
+    "test:all": "npm test",
+    "test:selenium": "node selenium-tests/selenium-runner.js",
+    "test:appium": "node appium-tests/appium-runner.js",
+    "test:unit": "node unit-tests/unit-runner.js",
+    "test:validation": "node validation-tests/validation-runner.js",
+    "test:deployment": "node deployment-tests/deployment-runner.js",
+    "test:load": "node load-tests/load-runner.js",
     "test:dast": "node dast-tests/dast-runner.js",
-    "test:load": "node load-tests/load-runner.js"
+    "report:master": "node reports/compile-master-report.js"
   },
   "dependencies": {
-    "firebase": "^12.16.0"
+    "@capacitor/android": "^8.4.2",
+    "@capacitor/core": "^8.4.2",
+    "@stripe/stripe-js": "^9.13.0",
+    "@supabase/supabase-js": "^2.112.1",
+    "@vitejs/plugin-react": "^6.0.5",
+    "firebase": "^12.17.0",
+    "jspdf": "^4.2.1",
+    "lucide-react": "^1.28.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.2",
+    "stripe": "^22.4.0",
+    "vite": "^8.2.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.4.2",
+    "vite-plugin-pwa": "^1.3.0"
   }
 }

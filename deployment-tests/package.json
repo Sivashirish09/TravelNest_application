@@ -1,0 +1,13 @@
+{
+  "name": "travelnest-deployment-tests",
+  "version": "1.0.0",
+  "description": "TravelNest Deployment Status, SSL, PWA & Infrastructure Health Tests Suite (300 Test Cases)",
+  "main": "deployment-runner.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "node deployment-runner.js"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0"
+  }
+}

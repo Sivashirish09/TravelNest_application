@@ -22,8 +22,15 @@ node_modules/
 npm-debug.log*
 package-lock.json
 
-# Generated Excel reports — produced by CI, not source code
-*.xlsx
+# Generated Excel reports — tracking master and suite reports
+# *.xlsx
+!reports/*.xlsx
+!selenium-tests/*.xlsx
+!appium-tests/*.xlsx
+!unit-tests/*.xlsx
+!validation-tests/*.xlsx
+!deployment-tests/*.xlsx
+!load-tests/*.xlsx
 
 # Python cache
 __pycache__/

@@ -1,0 +1,34 @@
+{
+  "project_info": {
+    "project_number": "666188515878",
+    "project_id": "trip-planner-2c635",
+    "storage_bucket": "trip-planner-2c635.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:666188515878:android:58ebce26f753a9dc8534e7",
+        "android_client_info": {
+          "package_name": "com.travelnest.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "666188515878-trip-planner-2c635.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_TripPlanner2c635PlaceholderKey"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

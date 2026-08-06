@@ -1,0 +1,13 @@
+{
+  "name": "travelnest-unit-tests",
+  "version": "1.0.0",
+  "description": "TravelNest API & Backend Logic Unit Tests Suite (300 Test Cases)",
+  "main": "unit-runner.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "node unit-runner.js"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0"
+  }
+}
