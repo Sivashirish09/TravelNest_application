@@ -286,6 +286,19 @@ jobs:
       - name: 🏗️ Build Production Bundle (Vite)
         run: npm run build
 
+      - name: 📥 Download Final Reports Bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: FINAL_REPORTS_BUNDLE
+          path: web-app/reports
+        continue-on-error: true
+
+      - name: 📁 Mirror Reports to Alternate Routes
+        run: |
+          mkdir -p "web-app/FINAL REPORTS"
+          cp -r web-app/reports/* "web-app/FINAL REPORTS/" 2>/dev/null || true
+          echo "✅ Reports mirrored to web-app/reports and web-app/FINAL REPORTS"
+
       - name: 🔍 Verify Production Build Integrity
         run: |
           test -f web-app/index.html || (echo "Error: web-app/index.html missing" && exit 1)

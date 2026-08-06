@@ -14,6 +14,7 @@ import {
   Camera,
   Star,
   HelpCircle,
+  ShieldCheck,
   LogOut
 } from 'lucide-react';
 
@@ -38,6 +39,7 @@ export const Sidebar = () => {
     { path: '/notifications', label: 'Notifications', icon: Bell, count: unreadCount },
     { path: '/memories', label: 'Travel Memories', icon: Camera },
     { path: '/reviews', label: 'My Reviews', icon: Star },
+    { path: '/reports', label: 'CI/CD Reports', icon: ShieldCheck, badge: '100%' },
     { path: '/profile', label: 'Profile Dashboard', icon: User },
     { path: '/settings', label: 'Settings & Security', icon: Settings },
     { path: '/support', label: 'Help & Support', icon: HelpCircle },

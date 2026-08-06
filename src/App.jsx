@@ -26,6 +26,7 @@ import { SettingsPage } from './pages/SettingsPage';
 import { TravelMemoriesPage } from './pages/TravelMemoriesPage';
 import { ReviewsPage } from './pages/ReviewsPage';
 import { SupportPage } from './pages/SupportPage';
+import { ReportsPage } from './pages/ReportsPage';
 
 // Protected App Layout Wrapper
 const ProtectedLayout = () => {
@@ -86,6 +87,7 @@ export const App = () => {
               <Route path="/memories" element={<TravelMemoriesPage />} />
               <Route path="/reviews" element={<ReviewsPage />} />
               <Route path="/support" element={<SupportPage />} />
+              <Route path="/reports" element={<ReportsPage />} />
             </Route>
 
             {/* Fallback Default Route */}
