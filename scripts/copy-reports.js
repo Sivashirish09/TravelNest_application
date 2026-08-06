@@ -21,6 +21,9 @@ function copyRecursive(src, dest) {
   }
 }
 
+const reportsDir = path.resolve(__dirname, '../reports');
+
 copyRecursive(srcDir, destDir1);
 copyRecursive(srcDir, destDir2);
+copyRecursive(reportsDir, destDir1);
 console.log('✅ Final Reports synced into web-app/reports and web-app/FINAL REPORTS');
