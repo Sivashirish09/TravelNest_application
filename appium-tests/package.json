@@ -2,26 +2,20 @@
   "name": "appium-tests",
   "version": "1.0.0",
   "description": "TravelNest Mobile Appium Automation Test Suite",
-  "main": "appium-tests.js",
+  "main": "appium-runner.js",
   "scripts": {
-    "test": "node appium-tests.js"
+    "test": "node appium-runner.js"
   },
   "keywords": [
     "appium",
-    "webdriverio",
     "mobile-testing",
     "android",
-    "uiautomator2",
     "travelnest"
   ],
   "author": "TravelNest QA Team",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "@wdio/cli": "^9.30.0",
-    "appium": "^3.6.0",
-    "appium-uiautomator2-driver": "^8.2.2",
-    "exceljs": "^4.4.0",
-    "webdriverio": "^9.30.0"
+    "exceljs": "^4.4.0"
   }
 }

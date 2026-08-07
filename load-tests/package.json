@@ -1,18 +1,16 @@
 {
   "name": "load-tests",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "TravelNest Load & Performance Test Suite",
+  "main": "load-runner.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node load-runner.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["load", "performance", "testing", "travelnest"],
+  "author": "TravelNest QA",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "autocannon": "^8.0.0",
-    "chalk": "^6.0.0",
     "exceljs": "^4.4.0"
   }
 }

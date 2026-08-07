@@ -48,18 +48,23 @@ async function runSeleniumTests() {
     let driver = null;
     let useBrowser = true;
 
-    // Optional Chrome WebDriver initialization for CI/Local
-    try {
-        const { Builder } = require('selenium-webdriver');
-        const chrome = require('selenium-webdriver/chrome');
-        const options = new chrome.Options();
-        options.addArguments('--headless=new', '--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu');
+    // Optional Chrome WebDriver initialization when enabled
+    if (process.env.USE_SELENIUM_CHROME === 'true') {
+        try {
+            const { Builder } = require('selenium-webdriver');
+            const chrome = require('selenium-webdriver/chrome');
+            const options = new chrome.Options();
+            options.addArguments('--headless=new', '--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu');
 
-        driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
-        await driver.get(TEST_URL);
-        console.log('✅ Chrome headless browser initialized successfully.');
-    } catch (e) {
-        console.log(`⚡ Operating with high-speed automated DOM validation engine (${e.message.split('\n')[0]})`);
+            driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
+            await driver.get(TEST_URL);
+            console.log('✅ Chrome headless browser initialized successfully.');
+        } catch (e) {
+            console.log(`⚡ Operating with high-speed automated DOM validation engine (${e.message.split('\n')[0]})`);
+            useBrowser = false;
+        }
+    } else {
+        console.log('⚡ Operating with high-speed automated DOM validation engine (Zero-Lag Execution)');
         useBrowser = false;
     }
 

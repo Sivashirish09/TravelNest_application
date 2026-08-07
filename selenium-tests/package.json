@@ -1,22 +1,20 @@
 {
   "name": "selenium-tests",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "TravelNest Selenium Web Frontend E2E Test Suite",
+  "main": "selenium-runner.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node selenium-runner.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["selenium", "webdriver", "e2e", "testing"],
+  "author": "TravelNest QA",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "chromedriver": "^150.0.4",
     "exceljs": "^4.4.0",
-    "mocha": "^11.7.6",
-    "selenium-webdriver": "^4.46.0"
+    "selenium-webdriver": "^4.20.0"
   }
 }

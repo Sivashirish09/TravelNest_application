@@ -51,13 +51,11 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: 📦 Install Dependencies
-        working-directory: selenium-tests
+      - name: 📦 Install Root Dependencies
         run: npm install --no-audit --no-fund
 
       - name: 🌐 Run Selenium 300 Website Tests
-        working-directory: selenium-tests
-        run: node selenium-runner.js
+        run: node selenium-tests/selenium-runner.js
 
       - name: 📤 Upload Selenium Web Report
         uses: actions/upload-artifact@v4
@@ -83,13 +81,11 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: 📦 Install Dependencies
-        working-directory: appium-tests
+      - name: 📦 Install Root Dependencies
         run: npm install --no-audit --no-fund
 
       - name: 📱 Run Appium 300 Android Tests
-        working-directory: appium-tests
-        run: node appium-runner.js
+        run: node appium-tests/appium-runner.js
 
       - name: 📤 Upload Appium Android Report
         uses: actions/upload-artifact@v4
@@ -115,13 +111,11 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: 📦 Install Dependencies
-        working-directory: unit-tests
+      - name: 📦 Install Root Dependencies
         run: npm install --no-audit --no-fund
 
       - name: 🔬 Run 300 API & Logic Unit Tests
-        working-directory: unit-tests
-        run: node unit-runner.js
+        run: node unit-tests/unit-runner.js
 
       - name: 📤 Upload Unit Test Report
         uses: actions/upload-artifact@v4
@@ -147,13 +141,11 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: 📦 Install Dependencies
-        working-directory: validation-tests
+      - name: 📦 Install Root Dependencies
         run: npm install --no-audit --no-fund
 
       - name: ✅ Run 300 Schema & Security Validation Tests
-        working-directory: validation-tests
-        run: node validation-runner.js
+        run: node validation-tests/validation-runner.js
 
       - name: 📤 Upload Validation Test Report
         uses: actions/upload-artifact@v4
@@ -179,13 +171,11 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: 📦 Install Dependencies
-        working-directory: deployment-tests
+      - name: 📦 Install Root Dependencies
         run: npm install --no-audit --no-fund
 
       - name: 🚀 Run 300 Deployment & Health Tests
-        working-directory: deployment-tests
-        run: node deployment-runner.js
+        run: node deployment-tests/deployment-runner.js
 
       - name: 📤 Upload Deployment Test Report
         uses: actions/upload-artifact@v4
@@ -211,13 +201,11 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: 📦 Install Dependencies
-        working-directory: load-tests
+      - name: 📦 Install Root Dependencies
         run: npm install --no-audit --no-fund
 
       - name: 📈 Run 300 Load & Performance Tests (100 Virtual Users)
-        working-directory: load-tests
-        run: node load-runner.js
+        run: node load-tests/load-runner.js
 
       - name: 📤 Upload Load Test Report
         uses: actions/upload-artifact@v4
@@ -252,9 +240,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: 📦 Install Dependencies
-        run: |
-          npm install --no-audit --no-fund
-          cd reports && npm install --no-audit --no-fund && cd ..
+        run: npm install --no-audit --no-fund
 
       - name: 📥 Download All Suite Reports
         uses: actions/download-artifact@v4
@@ -272,8 +258,7 @@ jobs:
           cp -r downloaded-reports/load-test-report/load-test-report.xlsx reports/ 2>/dev/null || true
 
       - name: 📊 Compile Master 1,800 Test Cases Report
-        working-directory: reports
-        run: node compile-master-report.js
+        run: node reports/compile-master-report.js
 
       - name: 📤 Upload Unified Master E2E Report
         uses: actions/upload-artifact@v4
