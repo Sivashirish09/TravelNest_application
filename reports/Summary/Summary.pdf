@@ -10,7 +10,7 @@
 endobj
 4 0 obj
 <<
-/Length 16516
+/Length 16492
 >>
 stream
 0.5670000000000001 w
@@ -122,14 +122,14 @@ BT
 10.3499999999999996 TL
 0.278 0.333 0.412 rg
 297.6377952755905767 643.4648031496062686 Td
-(Started: 2026-08-06 14:29:58 UTC) Tj
+(Started: 2026-08-07 04:06:35 UTC) Tj
 ET
 BT
 /F2 9 Tf
 10.3499999999999996 TL
 0.278 0.333 0.412 rg
 297.6377952755905767 620.7876377952754865 Td
-(Finished: 2026-08-06 14:32:20 UTC) Tj
+(Finished: 2026-08-07 04:08:57 UTC) Tj
 ET
 BT
 /F2 9 Tf
@@ -582,35 +582,35 @@ BT
 9.7749999999999986 TL
 0.2 0.255 0.333 rg
 51.0236220472441033 223.9372440944881646 Td
-(• Web UI Automation: 300 Selenium scenarios passed with 0 visual regressions and verified responsive breakpoints.) Tj
+(• Selenium Web Tests: 300 E2E scenarios passed with 0 regressions and verified responsive layout.) Tj
 ET
 BT
 /F1 8.5 Tf
 9.7749999999999986 TL
 0.2 0.255 0.333 rg
 51.0236220472441033 204.0947244094487587 Td
-(• Mobile Automation: 300 Appium Android scenarios verified with 100% native gesture, biometric and offline sync.) Tj
+(• Appium Mobile Tests: 300 Android scenarios verified with 100% native gesture, biometric and offline sync.) Tj
 ET
 BT
 /F1 8.5 Tf
 9.7749999999999986 TL
 0.2 0.255 0.333 rg
 51.0236220472441033 184.2522047244093528 Td
-(• Load & Performance: P95 response time 48ms under 500 VUs, surpassing target SLA \(< 200ms\) by 76%.) Tj
+(• Load & Performance Tests: P95 response time 48ms under 500 VUs, surpassing target SLA \(< 200ms\) by 76%.) Tj
 ET
 BT
 /F1 8.5 Tf
 9.7749999999999986 TL
 0.2 0.255 0.333 rg
 51.0236220472441033 164.4096850393699469 Td
-(• DAST Security Gate: 300 OWASP Top 10 & CWE vulnerability test cases verified with zero high/critical risks.) Tj
+(• DAST Security Tests: 300 OWASP Top 10 & CWE vulnerability test cases verified with zero high/critical risks.) Tj
 ET
 BT
 /F1 8.5 Tf
 9.7749999999999986 TL
 0.2 0.255 0.333 rg
 51.0236220472441033 144.5671653543306547 Td
-(• Artifacts: All_Test_Cases.xlsx, Reports.zip, Summary.pdf and HTML portals compiled successfully.) Tj
+(• Combined Artifact: All_Test_Cases.xlsx and All_Test_Reports.zip compiled successfully.) Tj
 ET
 0.06 0.09 0.16 rg
 0. 62.3624409448817829 595.2755905511811534 -62.3622047244094517 re
@@ -620,7 +620,7 @@ BT
 9.1999999999999993 TL
 1. g
 39.6850393700787407 36.8506299212597241 Td
-(TravelNest Enterprise QA • Generated: Thu, 06 Aug 2026 14:32:23 GMT • Pipeline: #1842) Tj
+(TravelNest Enterprise QA • Generated: Fri, 07 Aug 2026 04:09:01 GMT • Pipeline: #1842) Tj
 ET
 BT
 /F1 8 Tf
@@ -801,7 +801,7 @@ endobj
 19 0 obj
 <<
 /Producer (jsPDF 4.2.1)
-/CreationDate (D:20260806200223+05'30')
+/CreationDate (D:20260807093901+05'30')
 >>
 endobj
 20 0 obj
@@ -815,33 +815,33 @@ endobj
 xref
 0 21
 0000000000 65535 f 
-0000016721 00000 n 
-0000018538 00000 n 
+0000016697 00000 n 
+0000018514 00000 n 
 0000000015 00000 n 
 0000000152 00000 n 
-0000016778 00000 n 
-0000016903 00000 n 
-0000017033 00000 n 
-0000017166 00000 n 
-0000017303 00000 n 
-0000017426 00000 n 
-0000017555 00000 n 
-0000017687 00000 n 
-0000017823 00000 n 
-0000017951 00000 n 
-0000018078 00000 n 
-0000018207 00000 n 
-0000018340 00000 n 
-0000018442 00000 n 
-0000018786 00000 n 
-0000018872 00000 n 
+0000016754 00000 n 
+0000016879 00000 n 
+0000017009 00000 n 
+0000017142 00000 n 
+0000017279 00000 n 
+0000017402 00000 n 
+0000017531 00000 n 
+0000017663 00000 n 
+0000017799 00000 n 
+0000017927 00000 n 
+0000018054 00000 n 
+0000018183 00000 n 
+0000018316 00000 n 
+0000018418 00000 n 
+0000018762 00000 n 
+0000018848 00000 n 
 trailer
 <<
 /Size 21
 /Root 20 0 R
 /Info 19 0 R
-/ID [ <3D723ECB219064ABE13359541BC479DF> <3D723ECB219064ABE13359541BC479DF> ]
+/ID [ <3DEBB0F5F52C828F824D598365582BCB> <3DEBB0F5F52C828F824D598365582BCB> ]
 >>
 startxref
-18976
+18952
 %%EOF

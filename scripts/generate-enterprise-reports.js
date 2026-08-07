@@ -175,7 +175,7 @@ function generateSuiteTestCases(config) {
       const severities = ['Critical', 'High', 'High', 'Medium', 'Medium', 'Low'];
       const priority = priorities[count % priorities.length];
       const severity = severities[count % severities.length];
-      
+
       const executionTimeMs = 12 + ((count * 17) % 65);
       const executionTime = `${executionTimeMs}ms`;
 

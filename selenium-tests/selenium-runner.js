@@ -186,7 +186,7 @@ async function runSeleniumTests() {
     }
 
     if (driver) {
-        try { await driver.quit(); } catch (e) {}
+        try { await driver.quit(); } catch (e) { }
     }
 
     const totalDurationSec = ((Date.now() - startTime) / 1000).toFixed(2);
